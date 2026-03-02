@@ -15,6 +15,8 @@
     "pug": "^3.0.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@prettier/plugin-pug": "^3.4.2",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.8.1"
   }
 }
