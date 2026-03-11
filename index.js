@@ -1,17 +1,25 @@
-require("dotenv").config();
-const express = require("express");
-const route = require("./routes/client/index.route");
+require('dotenv').config();
+const express = require('express');
+const routeAdmin = require('./routes/admin/index.route');
+const route = require('./routes/client/index.route');
 const app = express();
 const port = process.env.PORT;
-const database = require("./config/database.js");
+const systemConfig = require("./config/system.js")
 
-database.connect(); 
-app.set("views", "./views");
+const database = require('./config/database.js');
 
-app.set("view engine", "pug");
+database.connect();
+app.set('views', './views');
 
-app.use(express.static("public"));
+app.set('view engine', 'pug');
 
+app.use(express.static('public'));
+
+//App Locals Varriables
+app.locals.prefixAdmin = systemConfig.prefixAdmin
+
+//Routes
+routeAdmin(app);
 route(app);
 
 app.listen(port, () => {
