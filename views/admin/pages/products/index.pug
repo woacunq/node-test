@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
+include ../../mixins/pagination.pug
 
 block main
   h1 Trang danh sach san pham
@@ -46,3 +47,4 @@ block main
               td
                 button.btn.btn-warning.btn-sm Sửa
                 button.btn.btn-danger.btn-sm.ml-1 Xóa
+  +pagination(pagination)
