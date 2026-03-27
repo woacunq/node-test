@@ -40,11 +40,28 @@ block main
               td #{ item.title }
               td #{ item.price }
               td
-                a.badge(
-                  class=item.status == 'active' ? 'bg-success' : 'bg-danger',
-                  href='#'
-                )= item.status == 'active' ? 'Hoạt động' : 'Dừng hoạt động'
+                if item.status === 'active'
+                  a.bg-success(
+                    href='javascript:;',
+                    data-status=item.status,
+                    data-id=item._id,
+                    button-change-status
+                  ) Hoạt động
+                else
+                  a.bg-danger(
+                    href='javascript:;',
+                    data-status=item.status,
+                    data-id=item._id,
+                    button-change-status
+                  ) Dừng hoạt động
               td
                 button.btn.btn-warning.btn-sm Sửa
                 button.btn.btn-danger.btn-sm.ml-1 Xóa
   +pagination(pagination)
+  form(
+    action='',
+    method='POST',
+    id='form-change-status',
+    data-path=`${prefixAdmin}/products/change-status`
+  ) 
+  script(src='/admin/js/product.js') 
