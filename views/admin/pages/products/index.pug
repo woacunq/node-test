@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
 
 block main
   h1 Trang danh sach san pham
@@ -16,52 +17,57 @@ block main
 
     .card-header Danh sach san pham
       .card-body
-        table.table.table-hover.table-sm
-          thead
-            tr
-            th STT
-            th Hình ảnh
-            th Tiêu đề
-            th Giá
-            th Trạng thái
-            th Hành động
+        +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
 
-          tbody
-            each item, index in products
-              tr
-              td #{ index+1 }
-              td
-                img(
-                  src=item.thumbnail,
-                  alt=item.title,
-                  width='100px',
-                  height='auto'
-                )
-              td #{ item.title }
-              td #{ item.price }
-              td
-                if item.status === 'active'
-                  a.bg-success(
-                    href='javascript:;',
-                    data-status=item.status,
-                    data-id=item._id,
-                    button-change-status
-                  ) Hoạt động
-                else
-                  a.bg-danger(
-                    href='javascript:;',
-                    data-status=item.status,
-                    data-id=item._id,
-                    button-change-status
-                  ) Dừng hoạt động
-              td
-                button.btn.btn-warning.btn-sm Sửa
-                button.btn.btn-danger.btn-sm.ml-1 Xóa
+      table.table.table-hover.table-sm(checkbox-multi)
+        thead
+          tr
+          th
+            input(type='checkbox', name='checkall')
+          th STT
+          th Hình ảnh
+          th Tiêu đề
+          th Giá
+          th Trạng thái
+          th Hành động
+
+        tbody
+          each item, index in products
+            tr
+            td
+              input(type='checkbox', name='id', value=item.id)
+            td #{ index+1 }
+            td
+              img(
+                src=item.thumbnail,
+                alt=item.title,
+                width='100px',
+                height='auto'
+              )
+            td #{ item.title }
+            td #{ item.price }
+            td
+              if item.status === 'active'
+                a.bg-success(
+                  href='javascript:;',
+                  data-status=item.status,
+                  data-id=item._id,
+                  button-change-status
+                ) Hoạt động
+              else
+                a.bg-danger(
+                  href='javascript:;',
+                  data-status=item.status,
+                  data-id=item._id,
+                  button-change-status
+                ) Dừng hoạt động
+            td
+              button.btn.btn-warning.btn-sm Sửa
+              button.btn.btn-danger.btn-sm.ml-1 Xóa
   +pagination(pagination)
-  form(
+  form#form-change-status(
     action='',
     method='POST',
-    id='form-change-status',
     data-path=`${prefixAdmin}/products/change-status`
   ) 
   script(src='/admin/js/product.js') 

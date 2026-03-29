@@ -7,7 +7,6 @@ if (buttonChangeStatus.length > 0) {
     button.addEventListener('click', () => {
       const statusCurrent = button.getAttribute('data-status');
       const id = button.getAttribute('data-id');
-      // console.log(statusCurrent);
 
       let statusChange = statusCurrent == 'active' ? 'inactive' : 'active';
       const action = path + `/${statusChange}/${id}?_method=PATCH`;

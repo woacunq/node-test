@@ -55,13 +55,36 @@ module.exports.index = async (req, res) => {
   });
 };
 
-// [GET] /admin/products/change-status/:status/:id
+// [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-
   const status = req.params.status;
   const id = req.params.id;
 
   await Product.updateOne({ _id: id }, { status: status });
+
+  res.redirect(req.get('Referrer') || '/admin/products');
+};
+
+
+// [PATCH] /admin/products/change-multi
+module.exports.changeMulti = async (req, res) => {
+  console.log(">>> ĐÃ VÀO HÀM CHANGE MULTI");
+  
+  const type = req.body.type;
+
+  const ids = req.body.ids.split(',').map((id) => id.trim());
+
+  switch (type) {
+    case 'active':
+      await Product.updateMany({ _id: { $in: ids } }, { status: 'active' });
+      break;
+    case 'inactive':
+      await Product.updateMany({ _id: { $in: ids } }, { status: 'inactive' });
+      break;
+    // Bạn có thể thêm case 'delete' ở đây sau này nếu muốn
+    default:
+      break;
+  }
 
   res.redirect(req.get('Referrer') || '/admin/products');
 };
