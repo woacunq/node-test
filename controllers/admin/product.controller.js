@@ -65,11 +65,10 @@ module.exports.changeStatus = async (req, res) => {
   res.redirect(req.get('Referrer') || '/admin/products');
 };
 
-
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
-  console.log(">>> ĐÃ VÀO HÀM CHANGE MULTI");
-  
+  console.log('>>> ĐÃ VÀO HÀM CHANGE MULTI');
+
   const type = req.body.type;
 
   const ids = req.body.ids.split(',').map((id) => id.trim());
@@ -89,11 +88,14 @@ module.exports.changeMulti = async (req, res) => {
   res.redirect(req.get('Referrer') || '/admin/products');
 };
 
-
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
-  await Product.deleteOne({ _id: id });
+  //xoa vinh vien
+  // await Product.deleteOne({ _id: id });
+
+  // Xoa mem
+  await Product.updateOne({ _id: id }, { deleted: true, deleteAt: new Date() });
 
   res.redirect(req.get('Referrer') || '/admin/products');
 };
