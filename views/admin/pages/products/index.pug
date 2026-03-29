@@ -63,11 +63,17 @@ block main
                 ) Dừng hoạt động
             td
               button.btn.btn-warning.btn-sm Sửa
-              button.btn.btn-danger.btn-sm.ml-1 Xóa
+              button.btn.btn-danger.btn-sm.ml-1(data-id=item.id, button-delete) Xóa
   +pagination(pagination)
   form#form-change-status(
     action='',
     method='POST',
     data-path=`${prefixAdmin}/products/change-status`
+  ) 
+
+  form#form-delete-item(
+    action='',
+    method='POST',
+    data-path=`${prefixAdmin}/products/delete`
   ) 
   script(src='/admin/js/product.js') 
