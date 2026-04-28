@@ -67,12 +67,11 @@ module.exports.changeStatus = async (req, res) => {
 
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
-  console.log('>>> ĐÃ VÀO HÀM CHANGE MULTI');
-
   const type = req.body.type;
 
   const ids = req.body.ids.split(',').map((id) => id.trim());
-
+  console.log("===== ĐANG CHẠY PHIÊN BẢN CODE MỚI NHẤT: 22h00 =====");
+  console.log("Hành động là:", req.body.type);
   switch (type) {
     case 'active':
       await Product.updateMany({ _id: { $in: ids } }, { status: 'active' });
@@ -80,7 +79,13 @@ module.exports.changeMulti = async (req, res) => {
     case 'inactive':
       await Product.updateMany({ _id: { $in: ids } }, { status: 'inactive' });
       break;
-    // Bạn có thể thêm case 'delete' ở đây sau này nếu muốn
+    case 'delete-all':
+      console.log('--- Đang thực hiện Xóa Tất Cả ---');
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        { deleted: true, deleteAt: new Date() },
+      );
+      break;
     default:
       break;
   }
