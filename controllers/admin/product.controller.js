@@ -41,6 +41,7 @@ module.exports.index = async (req, res) => {
   //end pagination
 
   const products = await Product.find(find)
+    .sort({ position: 'desc' })  //Sap xep theo position 
     .limit(objectPagination.limitItem)
     .skip(objectPagination.skip);
 
@@ -70,8 +71,7 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
 
   const ids = req.body.ids.split(',').map((id) => id.trim());
-  console.log("===== ĐANG CHẠY PHIÊN BẢN CODE MỚI NHẤT: 22h00 =====");
-  console.log("Hành động là:", req.body.type);
+  console.log('Hành động là:', req.body.type);
   switch (type) {
     case 'active':
       await Product.updateMany({ _id: { $in: ids } }, { status: 'active' });
@@ -80,11 +80,20 @@ module.exports.changeMulti = async (req, res) => {
       await Product.updateMany({ _id: { $in: ids } }, { status: 'inactive' });
       break;
     case 'delete-all':
-      console.log('--- Đang thực hiện Xóa Tất Cả ---');
       await Product.updateMany(
         { _id: { $in: ids } },
         { deleted: true, deleteAt: new Date() },
       );
+      break;
+    case 'change-position':
+      for (const item of ids) {
+        let [id, position] = item.split('-');
+        position = parseInt(position);
+        // console.log(id);
+        // console.log(position);
+        await Product.updateOne({ _id: id }, { position: position });
+      }
+
       break;
     default:
       break;

@@ -107,12 +107,12 @@ if (formChangeMulti) {
     const typeChange = e.target.elements.type.value;
 
     if (typeChange == 'delete-all') {
-      const isConfirm = confirm('Ban co muon nhung san pham nay khong?');
+      const isConfirm = confirm('Ban co muon xoa nhung san pham nay khong?');
       if (!isConfirm) {
         return;
       }
     }
-    console.log(typeChange);
+    // console.log(typeChange);
 
     if (inputsChecked.length > 0) {
       let ids = [];
@@ -120,7 +120,15 @@ if (formChangeMulti) {
 
       inputsChecked.forEach((input) => {
         let id = input.value;
-        ids.push(id);
+        if (typeChange == 'change-position') {
+          const position = input
+            .closest('tr')
+            .querySelector('input[name="position"]').value;
+
+          ids.push(`${id}-${position}`);
+        } else {
+          ids.push(id);
+        }
       });
 
       inputIds.value = ids.join(',');
