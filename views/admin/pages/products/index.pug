@@ -3,9 +3,12 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
 
 block main
-  h1 Trang danh sach san pham
+  +alert(5000)
+  h1 Danh sách sản phẩm
+
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
     .card-body
@@ -15,7 +18,7 @@ block main
         .col-6
           +search(keyword)
 
-    .card-header Danh sach san pham
+    .card-header Danh sách sản phẩm
       .card-body
         +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
 
@@ -47,13 +50,14 @@ block main
               )
             td #{ item.title }
             td #{ item.price }
-            td 
+            td
               input(
-                type="number",
+                type='number',
                 value=item.position,
-                style='width:60px',
+                style='width: 60px',
                 min='1',
-                name='position')
+                name='position'
+              )
             td
               if item.status === 'active'
                 a.bg-success(

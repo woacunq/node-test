@@ -1,0 +1,5 @@
+mixin alert(time)
+  - if (messages.success)
+    .message.info
+      .alert.alert-light(data-time=time, show-alert, role='alert') #{ messages.success } 
+        span(close-alert) X

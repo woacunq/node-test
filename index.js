@@ -8,9 +8,9 @@ const systemConfig = require('./config/system.js');
 const methodOverride = require('method-override');
 const database = require('./config/database.js');
 const bodyParser = require('body-parser');
-
-
-
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 database.connect();
 
@@ -27,6 +27,11 @@ app.use(methodOverride('_method'));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Flash
+app.use(cookieParser('WOACUNQ'));
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 
 //Routes
 routeAdmin(app);

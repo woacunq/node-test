@@ -41,7 +41,7 @@ module.exports.index = async (req, res) => {
   //end pagination
 
   const products = await Product.find(find)
-    .sort({ position: 'desc' })  //Sap xep theo position 
+    .sort({ position: 'desc' }) //Sap xep theo position
     .limit(objectPagination.limitItem)
     .skip(objectPagination.skip);
 
@@ -63,6 +63,7 @@ module.exports.changeStatus = async (req, res) => {
 
   await Product.updateOne({ _id: id }, { status: status });
 
+  req.flash('success', 'Cập nhật trạng thái thành công!');
   res.redirect(req.get('Referrer') || '/admin/products');
 };
 
@@ -75,6 +76,10 @@ module.exports.changeMulti = async (req, res) => {
   switch (type) {
     case 'active':
       await Product.updateMany({ _id: { $in: ids } }, { status: 'active' });
+      req.flash(
+        'success',
+        `${ids.length} sản phẩm đã được cập nhật trạng thái!`,
+      );
       break;
     case 'inactive':
       await Product.updateMany({ _id: { $in: ids } }, { status: 'inactive' });
@@ -84,6 +89,7 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids } },
         { deleted: true, deleteAt: new Date() },
       );
+      req.flash('success', `${ids.length} sản phẩm đã được xóa!`);
       break;
     case 'change-position':
       for (const item of ids) {
@@ -93,7 +99,7 @@ module.exports.changeMulti = async (req, res) => {
         // console.log(position);
         await Product.updateOne({ _id: id }, { position: position });
       }
-
+      req.flash('success', `${ids.length} sản phẩm đã được cập nhật vị trí!`);
       break;
     default:
       break;
@@ -110,6 +116,8 @@ module.exports.deleteItem = async (req, res) => {
 
   // Xoa mem
   await Product.updateOne({ _id: id }, { deleted: true, deleteAt: new Date() });
+
+  req.flash('success', `Đã xóa sản phẩm!`);
 
   res.redirect(req.get('Referrer') || '/admin/products');
 };
