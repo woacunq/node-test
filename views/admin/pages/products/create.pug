@@ -5,7 +5,8 @@ block main
 
   form#form-create-product(
     action=`${prefixAdmin}/products/create`,
-    method='POST'
+    method='POST',
+    enctype='multipart/form-data'
   )
     //- Tiêu đề
     .form-group
@@ -40,7 +41,11 @@ block main
     //- Ảnh
     .form-group
       label(for='thumbnail') Ảnh
-      input#thumbnail.form-control(type='text', name='thumbnail')
+      input#thumbnail.form-control-file(
+        type='file',
+        name='thumbnail',
+        accept='image/*'
+      )
 
     //- Vị trí
     .form-group
