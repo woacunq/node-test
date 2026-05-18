@@ -1,6 +1,7 @@
 const Product = require('../../model/product.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
+const systemConfig = require('../../config/system');
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -120,4 +121,26 @@ module.exports.deleteItem = async (req, res) => {
   req.flash('success', `Đã xóa sản phẩm!`);
 
   res.redirect(req.get('Referrer') || '/admin/products');
+};
+
+// [GET] /admin/products/create
+module.exports.create = async (req, res) => {
+  res.render('admin/pages/products/create', { pageTitle: 'Them moi san pham' });
+};
+
+// [POST] /admin/products/create
+module.exports.createPost = async (req, res) => {
+  req.body.price = parseInt(req.body.price);
+  req.body.stock = parseInt(req.body.stock);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+
+  if (req.body.position == '') {
+    const countProducts = await Product.countDocuments();
+    req.body.position = countProducts + 1;
+  } else {
+    req.body.position = parseInt(req.body.position);
+  }
+  const product = new Product(req.body);
+  await product.save();
+  res.redirect(`${systemConfig.prefixAdmin}/products`);
 };

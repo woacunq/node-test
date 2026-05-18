@@ -20,7 +20,12 @@ block main
 
     .card-header Danh sách sản phẩm
       .card-body
-        +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+        .row
+          .col-8
+            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+
+          .col-4
+           a.btn.btn-outline-success(href=`${prefixAdmin}/products/create`) + Thêm mới
 
       table.table.table-hover.table-sm(checkbox-multi)
         thead
