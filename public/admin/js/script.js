@@ -144,7 +144,7 @@ if (formChangeMulti) {
 // Delete item
 const buttonDelete = document.querySelectorAll('[button-delete]');
 const formDeleteItem = document.querySelector('#form-delete-item');
-const path = formDeleteItem.getAttribute('data-path');
+// const path = formDeleteItem.getAttribute('data-path');
 if (buttonDelete.length > 0) {
   buttonDelete.forEach((button) => {
     button.addEventListener('click', () => {
@@ -178,3 +178,18 @@ if (showAlert) {
   });
 }
 // END SHOW ALERT
+
+// Upload Image
+const uploadImage = document.querySelector('[upload-image]');
+if (uploadImage) {
+  const uploadImageInput = document.querySelector('[upload-image-input]');
+  const uploadImagePreview = document.querySelector('[upload-image-preview]');
+
+  uploadImageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
+// End Upload Image

@@ -39,13 +39,15 @@ block main
       input#stock.form-control(type='number', name='stock', value='0', min='0')
 
     //- Ảnh
-    .form-group
+    .form-group(upload-image)
       label(for='thumbnail') Ảnh
       input#thumbnail.form-control-file(
         type='file',
         name='thumbnail',
-        accept='image/*'
+        accept='image/*',
+        upload-image-input
       )
+      img#blah.image-preview(src='', upload-image-preview)
 
     //- Vị trí
     .form-group
