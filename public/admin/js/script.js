@@ -144,8 +144,9 @@ if (formChangeMulti) {
 // Delete item
 const buttonDelete = document.querySelectorAll('[button-delete]');
 const formDeleteItem = document.querySelector('#form-delete-item');
-// const path = formDeleteItem.getAttribute('data-path');
+
 if (buttonDelete.length > 0) {
+  const path = formDeleteItem.getAttribute('data-path');
   buttonDelete.forEach((button) => {
     button.addEventListener('click', () => {
       const isConfirm = confirm('Ban co chac chan muon xoa san pham nay khong');
@@ -190,6 +191,12 @@ if (uploadImage) {
     if (file) {
       uploadImagePreview.src = URL.createObjectURL(file);
     }
+  });
+  const removeImagePreview = document.querySelector('.remove-image');
+  // console.log(uploadImagePreview.getAttribute('src'));
+  removeImagePreview.addEventListener('click', () => {
+    uploadImagePreview.setAttribute('src', '');
+    uploadImageInput.value = '';
   });
 }
 // End Upload Image

@@ -6,7 +6,8 @@ include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 
 block main
-  +alert(5000)
+  +alert-success(5000)
+  +alert-error(5000)
   h1 Danh sách sản phẩm
 
   .card.mb-3
@@ -25,7 +26,7 @@ block main
             +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
 
           .col-4
-           a.btn.btn-outline-success(href=`${prefixAdmin}/products/create`) + Thêm mới
+            a.btn.btn-outline-success(href=`${prefixAdmin}/products/create`) + Thêm mới
 
       table.table.table-hover.table-sm(checkbox-multi)
         thead
@@ -65,22 +66,24 @@ block main
               )
             td
               if item.status === 'active'
-                a.bg-success(
+                a.text-decoration-none.bg-success(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
                   button-change-status
                 ) Hoạt động
               else
-                a.bg-danger(
+                a.text-decoration-none.bg-danger(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
                   button-change-status
                 ) Dừng hoạt động
             td
-              button.btn.btn-warning.btn-sm Sửa
-              button.btn.btn-danger.btn-sm.ml-1(data-id=item.id, button-delete) Xóa
+              a.text-decoration-none.bg-warning.text-black.p-1.mr-1(
+                href=`${prefixAdmin}/products/edit/${item.id}`
+              ) Sửa
+              button.btn.btn-danger.btn-sm.mx-1(data-id=item.id, button-delete) Xóa
   +pagination(pagination)
   form#form-change-status(
     action='',

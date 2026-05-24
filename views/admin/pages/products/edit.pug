@@ -2,27 +2,38 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block main
   +alert-error(5000)
-  h1 Thêm mới sản phẩm
+  +alert-success(5000)
+  h1 Chỉnh sửa sản phẩm
 
-  form#form-create-product(
-    action=`${prefixAdmin}/products/create`,
+  form#form-edit-product(
+    action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`,
     method='POST',
     enctype='multipart/form-data'
   )
     //- Tiêu đề
     .form-group
       label(for='title') Tiêu đề
-      input#title.form-control(type='text', name='title', required)
+      input#title.form-control(
+        type='text',
+        name='title',
+        required,
+        value=`${product.title}`
+      )
 
     //- Mô tả
     .form-group
       label(for='desc') Mô tả
-      textarea#desc.form-control(name='description', rows='5')
+      textarea#desc.form-control(name='description', rows='5') #{ product.description }
 
     //- Giá
     .form-group
       label(for='price') Giá
-      input#price.form-control(type='number', name='price', value='0', min='0')
+      input#price.form-control(
+        type='number',
+        name='price',
+        value=`${product.price}`,
+        min='0'
+      )
 
     //- % Giảm giá
     .form-group
@@ -37,7 +48,12 @@ block main
     //- Số lượng
     .form-group
       label(for='stock') Số lượng
-      input#stock.form-control(type='number', name='stock', value='0', min='0')
+      input#stock.form-control(
+        type='number',
+        name='stock',
+        value=`${product.stock}`,
+        min='0'
+      )
 
     //- Ảnh
     .form-group(upload-image)
@@ -49,7 +65,7 @@ block main
         upload-image-input
       )
 
-      img#blah.image-preview(src='', upload-image-preview) 
+      img#blah.image-preview(src=`${product.thumbnail}`, upload-image-preview) 
       .remove-image X
     //- Vị trí
     .form-group
@@ -58,7 +74,8 @@ block main
         type='number',
         name='position',
         placeholder='Tự động tăng',
-        min='1'
+        min='1',
+        value=`${product.position}`
       )
 
     .form-group.mb-3
@@ -71,7 +88,7 @@ block main
         type='radio',
         name='status',
         value='active',
-        checked
+        checked=product.status === 'active'
       )
       label.form-check-label(for='statusActive')
       | Hoạt động
@@ -80,12 +97,13 @@ block main
       input#statusInActive.form-check-input(
         type='radio',
         name='status',
-        value='inactive'
+        value='inactive',
+        checked=product.status === 'inactive'
       )
       label.form-check-label(for='statusInActive')
       | Dừng hoạt động
 
     .form-group
-    button.btn.btn-primary(type='submit') Tạo mới
+    button.btn.btn-primary(type='submit') Lưu
 
   script(src='/admin/js/product.js') 

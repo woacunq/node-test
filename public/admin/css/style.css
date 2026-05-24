@@ -245,4 +245,19 @@
 .image-preview[src=''] {
   display: none;
 }
+
+.remove-image {
+  cursor: pointer;
+}
+
+.image-preview[src=''] + .remove-image {
+  display: none;
+}
+
 /* End Image Preview */
+a {
+  color: #fff;
+  text-decoration: none;
+  padding: 3px;
+  border-radius: 5px;
+}

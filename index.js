@@ -32,6 +32,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('WOACUNQ'));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
+// app.use((req, res, next) => {
+//   res.locals.messages = {
+//     success: req.flash('success'),
+//     error: req.flash('error'),
+//   };
+
+//   next();
+// });
 
 //Routes
 routeAdmin(app);
