@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema(
     thumbnail: String,
     status: String,
     position: Number,
-    slug: { type: String, slug: ['title', 'price'], unique: true }, //mỗi sản phẩm có 1 slug duy nhất
+    slug: { type: String, slug: ['title'], unique: true }, //mỗi sản phẩm có 1 slug duy nhất
     //
     deleted: {
       type: Boolean,

@@ -25,20 +25,19 @@ include ../../mixins/box-head.pug
 
 block main
   .container.mt-4
-
     .row.mb-4
       .col-12
-        +box-head("Danh sách sản phẩm")
+        +box-head('Danh sách sản phẩm')
 
     .row
       each item in products
         .col-lg-4.col-md-6.mb-4
           .card.h-100.shadow-sm
-
             img.card-img-top(src=item.thumbnail, alt=item.title)
 
             .card-body
-              h5.card-title= item.title
-              p.text-danger.fw-bold.mb-1 #{item.priceNew}$
-              p.text-muted.text-decoration-line-through.mb-1 #{item.price}$
-              span.badge.bg-danger -#{item.discountPercentage}%
+              h5.card-titles
+                a(href=`products/${item.slug}`) #{ item.title }
+              p.text-danger.fw-bold.mb-1 #{ item.priceNew }$
+              p.text-muted.text-decoration-line-through.mb-1 #{ item.price }$
+              span.badge.bg-danger -#{ item.discountPercentage }%

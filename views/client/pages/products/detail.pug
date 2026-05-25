@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+
+block main
+  .container.my-4
+    .row
+      //- Ảnh sản phẩm
+      .col-md-5
+        if product.thumbnail
+          img.img-fluid.rounded.border(
+            src=product.thumbnail,
+            alt=product.title
+          )
+
+      //- Thông tin sản phẩm
+      .col-md-7
+        h1.mb-4 #{ product.title }
+
+        if product.price
+          .mb-3
+            span.font-weight-bold Giá:
+            b.text-danger.ml-2 #{ product.price }$
+
+        if product.discountPercentage
+          .mb-3
+            span.font-weight-bold Giảm giá:
+            b.text-success.ml-2 #{ product.discountPercentage }%
+
+        if product.stock
+          .mb-3
+            span.font-weight-bold Còn lại:
+            b.ml-2 #{ product.stock }
+
+        if product.position
+          .mb-3
+            span.font-weight-bold Vị trí:
+            b.ml-2 #{ product.position }
+
+        if product.description
+          .mb-3
+            span.font-weight-bold Mô tả:
+            p.mt-2 #{ product.description }

@@ -66,24 +66,28 @@ block main
               )
             td
               if item.status === 'active'
-                a.text-decoration-none.bg-success(
+                a.btn.bg-success(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
                   button-change-status
                 ) Hoạt động
               else
-                a.text-decoration-none.bg-danger(
+                a.btn.bg-danger(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
                   button-change-status
                 ) Dừng hoạt động
             td
-              a.text-decoration-none.bg-warning.text-black.p-1.mr-1(
+              a.btn.bg-secondary.text-black.p-1(
+                href=`${prefixAdmin}/products/detail/${item.id}`
+              ) Chi tiết
+
+              a.btn.bg-warning.text-black.p-1.mx-1(
                 href=`${prefixAdmin}/products/edit/${item.id}`
               ) Sửa
-              button.btn.btn-danger.btn-sm.mx-1(data-id=item.id, button-delete) Xóa
+              button.btn.btn-danger.btn-sm(data-id=item.id, button-delete) Xóa
   +pagination(pagination)
   form#form-change-status(
     action='',

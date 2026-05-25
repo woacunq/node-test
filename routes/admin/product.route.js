@@ -31,4 +31,12 @@ router.patch(
   controller.editPatch,
 );
 
+router.get('/detail/:id', controller.detail);
+
+
+router.get('/detail-test', (req, res) => {
+  res.send('DETAIL OK');
+});
+
+
 module.exports = router;
