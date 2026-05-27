@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Biến môi trường (CỰC KỲ QUAN TRỌNG)
+.env
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Thư mục build/dist (nếu sau này bạn có build dự án)
+dist/
+build/
+
+# Các thư mục logs hoặc dữ liệu tạm
+logs/
+*.log
+tmp/
