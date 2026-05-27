@@ -66,18 +66,20 @@ block main
               )
             td
               if item.status === 'active'
-                a.btn.bg-success(
+                a.btn.btn-success.text-nowrap(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
-                  button-change-status
+                  button-change-status,
+                  style='width: 140px'
                 ) Hoạt động
               else
-                a.btn.bg-danger(
+                a.btn.btn-danger.text-nowrap(
                   href='javascript:;',
                   data-status=item.status,
                   data-id=item._id,
-                  button-change-status
+                  button-change-status,
+                  style='width: 140px'
                 ) Dừng hoạt động
             td
               a.btn.bg-secondary.text-black.p-1(
