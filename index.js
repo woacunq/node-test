@@ -14,10 +14,10 @@ const session = require('express-session');
 
 database.connect();
 
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 //App Locals Varriables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
@@ -32,19 +32,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('WOACUNQ'));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
-// app.use((req, res, next) => {
-//   res.locals.messages = {
-//     success: req.flash('success'),
-//     error: req.flash('error'),
-//   };
-
-//   next();
-// });
 
 //Routes
 routeAdmin(app);
 route(app);
 
 app.listen(port, () => {
+  console.log(__dirname);
+
   console.log(`Example app listening on port ${port}`);
 });
