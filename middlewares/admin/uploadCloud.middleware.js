@@ -1,10 +1,10 @@
 const streamifier = require('streamifier');
 const cloudinary = require('cloudinary').v2;
 
-// Cấu hình Cloudinary (Hãy đảm bảo tên biến trong file .env khớp chính xác)
+// Cấu hình Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_KEY, // Thường viết hoa để đồng bộ với .env
+  api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
 
@@ -30,15 +30,11 @@ module.exports.upload = async (req, res, next) => {
     });
   };
 
-  // Vì hàm cha đã có 'async', bạn sử dụng try...catch trực tiếp tại đây cực kỳ sạch sẽ
   try {
     const result = await streamUpload(req);
 
     // Gán link ảnh động dựa trên tên trường đầu vào (ví dụ: thumbnail, avatar, ...)
     req.body[req.file.fieldname] = result.secure_url;
-
-    // Đã xử lý xong, chuyển sang middleware tiếp theo
-    next();
   } catch (error) {
     console.dir(error, { depth: null });
     res.status(500).json({
