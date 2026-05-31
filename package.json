@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
@@ -20,7 +21,8 @@
     "mongoose": "^9.2.3",
     "mongoose-slug-updater": "^3.3.0",
     "multer": "^2.1.1",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "^3.4.2",

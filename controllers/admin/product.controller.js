@@ -134,17 +134,15 @@ module.exports.createPost = async (req, res) => {
   req.body.stock = parseInt(req.body.stock);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
-
   if (req.body.position == '') {
     const countProducts = await Product.countDocuments();
     req.body.position = countProducts + 1;
   } else {
     req.body.position = parseInt(req.body.position);
   }
+
   console.log(req.body);
+
   const product = new Product(req.body);
   await product.save();
   res.redirect(`${systemConfig.prefixAdmin}/products`);
