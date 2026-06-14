@@ -41,8 +41,18 @@ module.exports.index = async (req, res) => {
   objectPagination.totalPage = totalPage;
   //end pagination
 
+  // SORT
+  let sort = {};
+
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = 'desc';
+  }
+  // END SORT
+
   const products = await Product.find(find)
-    .sort({ position: 'desc' }) //Sap xep theo position
+    .sort(sort) //Sap xep theo position
     .limit(objectPagination.limitItem)
     .skip(objectPagination.skip);
 

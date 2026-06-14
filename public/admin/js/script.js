@@ -200,3 +200,47 @@ if (uploadImage) {
   });
 }
 // End Upload Image
+
+// SORT
+const sort = document.querySelector('[sort]');
+if (sort) {
+  let url = new URL(window.location.href);
+  const sortSelect = document.querySelector('[sort-select]');
+  const sortClear = document.querySelector('[sort-clear]');
+
+  // Sap xep
+  sortSelect.addEventListener('change', (e) => {
+    const value = e.target.value;
+    const [sortKey, sortValue] = value.split('-');
+    url.searchParams.set('sortKey', sortKey);
+    url.searchParams.set('sortValue', sortValue);
+
+    window.location.href = url.href;
+  });
+
+  // Xoa sap xep
+  sortClear.addEventListener('click', () => {
+    url.searchParams.delete('sortKey');
+    url.searchParams.delete('sortValue');
+
+    window.location.href = url.href;
+  });
+  // Them  select cho option
+  const sortKey = url.searchParams.get('sortKey');
+  const sortValue = url.searchParams.get('sortValue');
+  if (sortKey && sortValue) {
+    const optionValue = `${sortKey}-${sortValue}`;
+    const optionSelected = sort.querySelector(`option[value="${optionValue}"]`);
+    optionSelected.selected = true;
+
+    // const options = sort.querySelectorAll('option');
+
+    // options.forEach((o) => {
+    //   if (o.value == optionValue) {
+    //     o.setAttribute('selected', true);
+    //   }
+    // });
+  }
+}
+
+// END SORT
