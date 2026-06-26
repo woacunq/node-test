@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const routeAdmin = require('./routes/admin/index.route');
 const route = require('./routes/client/index.route');
 const app = express();
@@ -14,7 +15,7 @@ const session = require('express-session');
 
 database.connect();
 
-app.set('views', `${__dirname}/views`  );
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
 app.use(express.static(`${__dirname}/public`));
@@ -32,6 +33,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('WOACUNQ'));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
+
+// Tinymce
+app.use(
+  '/tinymce',
+  express.static(path.join(__dirname, 'node_modules', 'tinymce')),
+);
 
 //Routes
 routeAdmin(app);

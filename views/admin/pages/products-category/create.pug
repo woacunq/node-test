@@ -1,0 +1,103 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+  +alert-error(5000)
+  h1.mb-4 Thêm mới danh mục sản phẩm
+
+  form(
+    action=`${prefixAdmin}/products-category/create`,
+    method='POST',
+    enctype='multipart/form-data'
+  )
+    // Tiêu đề
+    .form-group.mb-3
+      label(for='title') Tiêu đề
+      input#title.form-control(
+        type='text',
+        name='title',
+        placeholder='Nhập tên danh mục',
+        required
+      )
+
+    // Danh mục cha
+    .form-group.mb-3
+      label(for='parent_id') Danh mục cha
+
+      input#parent_id.form-control(
+        type='text',
+        name='parent_title',
+        placeholder='Nhập tên danh mục cha',
+        required
+      )
+
+    // Mô tả
+    .form-group.mb-3
+      label(for='description') Mô tả
+
+      textarea#description.form-control(name='description', rows='6')
+
+    // Ảnh
+    .form-group.mb-3
+      label(for='thumbnail') Ảnh đại diện
+
+      input#thumbnail.form-control(
+        type='file',
+        name='thumbnail',
+        accept='image/*'
+      )
+
+    // Vị trí
+    .form-group.mb-3
+      label(for='position') Vị trí
+
+      input#position.form-control(
+        type='number',
+        name='position',
+        value='0',
+        min='0'
+      )
+
+    //- // Nổi bật
+    //- .form-group.mb-3
+    //-   label Nổi bật
+
+    //-   .form-check
+    //-     input#featured.form-check-input(
+    //-       type='checkbox',
+    //-       name='featured',
+    //-       value='true'
+    //-     )
+
+    //-     label.form-check-label(for='featured')
+    //-       | Danh mục nổi bật
+
+    // Trạng thái
+    .form-group.mb-4
+      label Trạng thái
+
+      .form-check
+        input#active.form-check-input(
+          type='radio',
+          name='status',
+          value='active',
+          checked
+        )
+
+        label.form-check-label(for='active')
+          | Hoạt động
+
+      .form-check
+        input#inactive.form-check-input(
+          type='radio',
+          name='status',
+          value='inactive'
+        )
+
+        label.form-check-label(for='inactive')
+          | Dừng hoạt động
+
+    button.btn.btn-primary(type='submit')
+      | Tạo mới
+
+    a.btn.btn-secondary.ml-2(href=`${prefixAdmin}/products-category`)
+      | Quay lại
