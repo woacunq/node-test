@@ -25,19 +25,17 @@ module.exports.index = async (req, res) => {
   // pagination
   let objectPagination = {
     currentPage: 1,
-    limitItem: 4,
+    limitItems: 4,
   };
 
   if (req.query.page) {
     objectPagination.currentPage = parseInt(req.query.page);
   }
 
-  // console.log(objectPagination.currentPage);
-
-  objectPagination.skip = (objectPagination.currentPage - 1) * 4;
+  objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItems;
   const countProducts = await Product.countDocuments(find);
-  const totalPage = Math.ceil(countProducts / objectPagination.limitItem);
-  // console.log(totalPage);
+  const totalPage = Math.ceil(countProducts / objectPagination.limitItems);
+
   objectPagination.totalPage = totalPage;
   //end pagination
 
@@ -52,11 +50,10 @@ module.exports.index = async (req, res) => {
   // END SORT
 
   const products = await Product.find(find)
-    .sort(sort) //Sap xep theo position
-    .limit(objectPagination.limitItem)
+    .sort(sort)
+    .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
-  // console.log(products);
 
   res.render('admin/pages/products/index', {
     pageTitle: 'Trang danh sach san pham',
@@ -151,7 +148,7 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const product = new Product(req.body);
   await product.save();
@@ -182,10 +179,6 @@ module.exports.editPatch = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.stock = parseInt(req.body.stock);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
-
-    if (req.file) {
-      req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
 
     if (req.body.position == '') {
       const countProducts = await Product.countDocuments();

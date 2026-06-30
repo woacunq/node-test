@@ -35,6 +35,8 @@ module.exports.upload = async (req, res, next) => {
 
     // Gán link ảnh động dựa trên tên trường đầu vào (ví dụ: thumbnail, avatar, ...)
     req.body[req.file.fieldname] = result.secure_url;
+
+    next();
   } catch (error) {
     console.dir(error, { depth: null });
     res.status(500).json({

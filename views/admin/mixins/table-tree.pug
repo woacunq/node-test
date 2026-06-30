@@ -1,0 +1,60 @@
+mixin table-tree(items, level = 0)
+  each item in items
+    //- Tạo tiền tố thụt lề (giống hệt phần select-tree)
+    - const prefix = Array(level + 1).join("-- ")
+    
+    //- Mỗi lần lặp qua 1 phần tử, tăng biến đếm STT lên 1
+    - count++
+
+    tr
+      td
+        input(
+          type="checkbox"
+          name="id"
+          value=item.id
+        )
+      td #{count}
+      td
+        img(
+          src=item.thumbnail,
+          alt=item.title,
+          style="width: 100px; height: 80px; object-fit: cover; border-radius: 5px;"
+        )
+      //- Thêm tiền tố vào trước tiêu đề để thụt lề
+      td #{prefix}#{item.title}
+      td
+        input(
+          type="number"
+          value=item.position
+          min="1"
+          style="width:60px"
+          name="position"
+        )
+      td
+        if item.status === "active"
+          a.btn.btn-success.text-nowrap(
+            href="javascript:;"
+            data-status=item.status
+            data-id=item._id
+            button-change-status
+            style="width:140px"
+          ) Hoạt động
+        else
+          a.btn.btn-danger.text-nowrap(
+            href="javascript:;"
+            data-status=item.status
+            data-id=item._id
+            button-change-status
+            style="width:140px"
+          ) Dừng hoạt động
+      td
+        a.btn.bg-warning.text-black.p-1.me-1(
+          href=`${prefixAdmin}/products-category/edit/${item.id}`
+        ) Sửa
+        button.btn.btn-danger.btn-sm(
+          data-id=item.id
+          button-delete
+        ) Xóa
+
+    if item.children && item.children.length > 0
+      +table-tree(item.children, level + 1)

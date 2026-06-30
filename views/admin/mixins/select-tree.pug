@@ -1,0 +1,13 @@
+mixin select-tree(items, level = 0, currentParentId = "")
+  each item in items
+    //- Tạo tiền tố thụt lề dựa trên level
+    - const prefix = Array(level + 1).join("-- ")
+    
+    option(
+      value=item.id
+      selected=(item.id === currentParentId ? true : false)
+    ) #{prefix}#{item.title}
+
+      //- Nếu có mảng con, tiếp tục đệ quy và nhớ truyền luôn currentParentId đi tiếp
+      if item.children && item.children.length > 0
+        +select-tree(item.children, level + 1, currentParentId)
