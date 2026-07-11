@@ -1,0 +1,51 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") #{pageTitle}
+
+  .card.mb-3
+    .card-header Thông tin danh mục
+    .card-body
+      if (record.title)
+        h5.card-title Tiêu đề: <b>#{record.title}</b>
+
+      if (record.parent_id)
+        div.mb-3 ID Danh mục cha: <b>#{record.parent_id}</b>
+
+      if (record.thumbnail)
+        div.mb-3
+          img(
+            src=record.thumbnail
+            alt=record.title
+            style="width: 200px; height: auto; border-radius: 5px; border: 1px solid #ddd; object-fit: cover;"
+          )
+
+      if (record.status)
+        div.mb-3
+          span Trạng thái: 
+          if (record.status === "active")
+            span.badge.bg-success Hoạt động
+          else
+            span.badge.bg-danger Dừng hoạt động
+
+      if (record.position)
+        div.mb-3 Vị trí: <b>#{record.position}</b>
+
+      if (record.slug)
+        div.mb-3 Slug: <b>#{record.slug}</b>
+
+      if (record.description)
+        div.mb-3
+          span <b>Mô tả chi tiết:</b>
+          //- Sử dụng !{} để Pug dịch mã HTML từ TinyMCE thành giao diện thật
+          div.mt-2 !{record.description}
+
+      hr
+
+      a.btn.btn-warning.me-2(
+        href=`${prefixAdmin}/products-category/edit/${record._id}`
+      ) Chỉnh sửa danh mục
+      
+      a.btn.btn-secondary(
+        href=`${prefixAdmin}/products-category`
+      ) Quay lại danh sách

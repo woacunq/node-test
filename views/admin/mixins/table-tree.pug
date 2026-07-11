@@ -1,6 +1,6 @@
 mixin table-tree(items, level = 0)
   each item in items
-    //- Tạo tiền tố thụt lề (giống hệt phần select-tree)
+    //- Tạo tiền tố thụt lề 
     - const prefix = Array(level + 1).join("-- ")
     
     //- Mỗi lần lặp qua 1 phần tử, tăng biến đếm STT lên 1
@@ -48,7 +48,10 @@ mixin table-tree(items, level = 0)
             style="width:140px"
           ) Dừng hoạt động
       td
-        a.btn.bg-warning.text-black.p-1.me-1(
+        a.btn.bg-secondary.text-black.p-1(
+                href=`${prefixAdmin}/products-category/detail/${item.id}`
+              ) Chi tiết
+        a.btn.bg-warning.text-black.p-1.mx-1(
           href=`${prefixAdmin}/products-category/edit/${item.id}`
         ) Sửa
         button.btn.btn-danger.btn-sm(

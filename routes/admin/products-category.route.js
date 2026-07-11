@@ -16,8 +16,10 @@ router.patch('/change-multi', controller.changeMulti);
 
 router.delete('/delete/:id', controller.deleteItem);
 
-
 router.get('/edit/:id', controller.edit);
+
+router.get('/detail/:id', controller.detail);
+
 
 router.patch(
   '/edit/:id',

@@ -6,6 +6,10 @@ const productSchema = new mongoose.Schema(
   {
     title: String,
     description: String,
+    product_category_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductsCategory"
+    },
     price: Number,
     discountPercentage: Number,
     stock: Number,

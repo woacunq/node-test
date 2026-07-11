@@ -1,5 +1,8 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
+
 block main
   +alert-error(5000)
   +alert-success(5000)
@@ -24,6 +27,16 @@ block main
     .form-group
       label(for='desc') Mô tả
       textarea#desc.textarea-mce.form-control(name='description', rows='5') #{ product.description }
+
+    //- Danh mục
+    .form-group
+      label(for="product_category_id") Danh mục sản phẩm
+      select#product_category_id.form-control(name="product_category_id")
+        option(value="") -- Chọn danh mục --
+
+        if categories && categories.length > 0
+          - const currentCategoryId = product.product_category_id ? product.product_category_id.toString() : ""
+          +select-tree(categories, 0, currentCategoryId)
 
     //- Giá
     .form-group

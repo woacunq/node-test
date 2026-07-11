@@ -1,6 +1,8 @@
 const Product = require('../../model/product.model');
+const ProductsCategory = require('../../model/category.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
+const createTreeHelper = require('../../helpers/createTree');
 const systemConfig = require('../../config/system');
 
 // [GET] /admin/products
@@ -132,7 +134,12 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
-  res.render('admin/pages/products/create', { pageTitle: 'Them moi san pham' });
+  const categories = await ProductsCategory.find({ deleted: false })
+
+
+  const newRecords = createTreeHelper.tree(categories);
+
+  res.render('admin/pages/products/create', { pageTitle: 'Them moi san pham', categories: newRecords });
 };
 
 // [POST] /admin/products/create
@@ -148,10 +155,9 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  // console.log(req.body);
-
   const product = new Product(req.body);
   await product.save();
+
   res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
 
@@ -162,9 +168,16 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id,
       deleted: false,
     });
+
+    const categories = await ProductsCategory.find({ deleted: false })
+
+    const newRecords = createTreeHelper.tree(categories);
+
+
     res.render('admin/pages/products/edit', {
       pageTitle: 'Chỉnh sửa sản phẩm',
       product: product,
+      categories: newRecords
     });
   } catch (error) {
     req.flash('error', 'Sản phẩm không tồn tại');
@@ -200,18 +213,20 @@ module.exports.editPatch = async (req, res) => {
 // [GET] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
   try {
-    const product = await Product.findOne({
-      _id: req.params.id,
-      deleted: false,
-    });
-    console.log(product);
+    const id = req.params.id;
 
-    res.render('admin/pages/products/detail', {
-      pageTitle: 'Chi tiết sản phẩm',
-      product: product,
+    const product = await Product.findOne({
+      _id: id,
+      deleted: false
+    })
+      .populate("product_category_id");
+
+    res.render("admin/pages/products/detail", {
+      pageTitle: "Chi tiết sản phẩm",
+      product: product
     });
   } catch (error) {
-    req.flash('error', 'Sản phẩm không tồn tại');
+    req.flash("error", "Sản phẩm không tồn tại!");
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
 };

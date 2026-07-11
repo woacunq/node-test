@@ -30,8 +30,17 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Flash
-app.use(cookieParser('WOACUNQ'));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(cookieParser());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || "WOACUNQ",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60000
+  }
+}));
+
 app.use(flash());
 
 // Tinymce

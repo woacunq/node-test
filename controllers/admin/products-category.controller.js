@@ -38,6 +38,7 @@ module.exports.index = async (req, res) => {
     keyword: keyword
   });
 };
+
 // [GET] /admin/products-category/create
 module.exports.create = async (req, res) => {
 
@@ -186,4 +187,24 @@ module.exports.createPost = async (req, res) => {
   const record = new ProductsCategory(req.body);
   await record.save();
   res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+};
+
+
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const record = await ProductsCategory.findOne({
+      _id: req.params.id,
+      deleted: false,
+    });
+    console.log(record);
+
+    res.render('admin/pages/products-category/detail', {
+      pageTitle: 'Chi tiết danh mục',
+      record: record,
+    });
+  } catch (error) {
+    req.flash('error', 'Danh mục không tồn tại');
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
 };
