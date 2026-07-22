@@ -1,0 +1,175 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+
+block main
+    +alert-success(5000)
+    +alert-error(5000)
+    h1.mb-4 Phân quyền
+
+    if(records)
+        div(data-records=records)
+
+    if records && records.length > 0
+        .card.shadow-sm
+            .card-header.bg-white.d-flex.justify-content-between.align-items-center
+                h5.mb-0 Danh sách phân quyền
+
+                button.btn.btn-primary(
+                type="button"
+                button-submit
+                )
+                    i.fa-solid.fa-floppy-disk.me-2
+                    | Cập nhật
+
+            .card-body.p-0
+                table.table.table-bordered.table-hover.mb-0(
+                            table-permissions
+                            )
+                    thead.table-light
+                        tr
+                            th(style="width:250px") Tính năng
+
+                            each record in records
+                                th.text-center= record.title
+
+                    tbody
+                        tr.table-secondary
+                            //- Danh mục sản phẩm
+                            td(colspan=records.length + 1)
+                                strong Danh mục sản phẩm
+
+                        -
+                            const permissions = [
+                                {
+                                    key: "products-category_view",
+                                    title: "Xem"
+                                },
+                                {
+                                    key: "products-category_create",
+                                    title: "Thêm mới"
+                                },
+                                {
+                                    key: "products-category_edit",
+                                    title: "Chỉnh sửa"
+                                },
+                                {
+                                    key: "products-category_delete",
+                                    title: "Xóa"
+                                }
+                            ];
+
+                        each permission in permissions
+                            tr(data-name=permission.key)
+                                td= permission.title
+
+                                each record in records
+                                    td.text-center
+                                        input(
+                                            type="checkbox"
+                                            data-id=record._id
+                                            data-permission=permission.key
+                                        )
+                                       
+                                        //- checked=record.permissions.includes(permission.key)
+                        
+                        //- Sản phẩm
+                        tr.table-secondary
+                            td(colspan=records.length + 1)
+                                strong Sản phẩm
+
+                        -
+                            const productPermissions = [
+                                {
+                                    key: "products_view",
+                                    title: "Xem"
+                                },
+                                {
+                                    key: "products_create",
+                                    title: "Thêm mới"
+                                },
+                                {
+                                    key: "products_edit",
+                                    title: "Chỉnh sửa"
+                                },
+                                {
+                                    key: "products_delete",
+                                    title: "Xóa"
+                                }
+                            ];
+
+                        each permission in productPermissions
+                            tr(data-name=permission.key)
+                                td= permission.title
+
+                                each record in records
+                                    td.text-center
+                                        input(
+                                            type="checkbox"
+                                            data-id=record._id
+                                            data-permission=permission.key
+                                            checked=record.permissions && record.permissions.includes(permission.key)
+                                        )
+                        //-  Nhóm quyền  
+                        tr.table-secondary
+                            td(colspan=records.length + 1)
+                                strong Nhóm quyền
+
+                        -
+                            const rolePermissions = [
+                                {
+                                    key: "roles_view",
+                                    title: "Xem"
+                                },
+                                {
+                                    key: "roles_create",
+                                    title: "Thêm mới"
+                                },
+                                {
+                                    key: "roles_edit",
+                                    title: "Chỉnh sửa"
+                                },
+                                {
+                                    key: "roles_delete",
+                                    title: "Xóa"
+                                },
+                                {
+                                    key: "roles_permissions",
+                                    title: "Phân quyền"
+                                }
+                            ];
+
+                        each permission in rolePermissions
+                            tr(data-name=permission.key)
+                                td= permission.title
+
+                                each record in records
+                                    td.text-center
+                                        input(
+                                            type="checkbox"
+                                            data-id=record._id
+                                            data-permission=permission.key
+                                            checked=record.permissions && record.permissions.includes(permission.key)
+                                        )
+    else
+        .card.shadow-sm
+            .card-body.text-center.py-5
+                h4.mb-3 Chưa có nhóm quyền
+
+                p.text-muted.mb-4
+                    | Bạn cần tạo ít nhất một nhóm quyền trước khi tiến hành phân quyền.
+
+                a.btn.btn-success(href=`${prefixAdmin}/roles/create`)
+                    i.fa-solid.fa-plus.me-2
+                    | Tạo nhóm quyền
+
+
+
+    form#form-change-permissions(
+    action=`${prefixAdmin}/roles/permissions?_method=PATCH`
+    method="POST")
+        input(
+            type="hidden"
+            name="permissions"
+        )
+    script(src="/admin/js/roles.js") 
