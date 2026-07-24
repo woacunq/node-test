@@ -1,0 +1,94 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Danh sách tài khoản
+
+  .card.mb-3
+    .card-header
+      | Danh sách tài khoản
+
+    .card-body
+      .row.mb-3
+        .col-8
+
+        .col-4.text-right
+          a(
+            href=`${prefixAdmin}/accounts/create`
+            class="btn btn-outline-success"
+          )
+            | + Thêm mới
+
+      if records && records.length > 0
+        .table-responsive
+          table.table.table-hover.table-bordered
+            thead
+              tr
+                th STT
+                th Avatar
+                th Họ tên
+                th Email
+                th Số điện thoại
+                th Vai trò
+                th Trạng thái
+                th Hành động
+
+            tbody
+              each item, index in records
+                tr
+                  //- STT
+                  td= index + 1
+
+                  //- Avatar
+                  td
+                    if item.avatar
+                      img(
+                        src=item.avatar
+                        alt=item.fullName
+                        width="50"
+                        height="50"
+                        style="object-fit: cover; border-radius: 50%;"
+                      )
+                    else
+                      | Chưa có
+
+                  //- Họ tên
+                  td= item.fullName
+
+                  //- Email
+                  td= item.email
+
+                  //- Số điện thoại
+                  td= item.phone || "-"
+
+                  //- Vai trò
+                  td
+                    if item.role_id
+                      if item.role_id.title
+                        = item.role_id.title
+                      else
+                        = item.role_id
+                    else
+                      | Chưa phân quyền
+
+                  //- Trạng thái
+                  td
+                    if item.status == "active"
+                      span.bg-success Hoạt động
+                    else
+                      span.bg-danger Dừng hoạt động
+
+                  //- Hành động
+                  td
+                    a.btn.btn-warning.btn-sm(
+                      href=`${prefixAdmin}/accounts/edit/${item.id}`
+                    )
+                      | Sửa
+
+                    a.btn.btn-danger.btn-sm.ml-2(
+                      href=`${prefixAdmin}/accounts/delete/${item.id}`
+                    )
+                      | Xóa
+
+      else
+        .alert.alert-info
+          | Chưa có tài khoản nào.

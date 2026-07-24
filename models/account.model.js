@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const generate = require("../helpers/generate")
-mongoose.plugin(slug);
 
 const accountSchema = new mongoose.Schema(
     {
@@ -13,7 +12,10 @@ const accountSchema = new mongoose.Schema(
         },
         phone: String,
         avatar: String,
-        roles_id: String,
+        role_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Role"
+        },
         status: String,
         deleted: {
             type: Boolean,

@@ -1,5 +1,5 @@
-const Product = require('../../model/product.model');
-const ProductsCategory = require('../../model/category.model');
+const Product = require('../../models/product.model');
+const ProductsCategory = require('../../models/category.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
 const createTreeHelper = require('../../helpers/createTree');

@@ -1,4 +1,4 @@
-const ProductsCategory = require('../../model/category.model');
+const ProductsCategory = require('../../models/category.model');
 const systemConfig = require('../../config/system');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
