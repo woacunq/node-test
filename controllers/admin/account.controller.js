@@ -48,3 +48,98 @@ module.exports.createPost = async (req, res) => {
 
 
 };
+
+
+// [GET] /admin/accounts/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+
+        const record = await Account.findOne({
+            _id: req.params.id,
+            deleted: false,
+        });
+
+        const roles = await Role.find({ deleted: false })
+        res.render('admin/pages/accounts/edit', {
+            pageTitle: 'Chỉnh sửa tài khoản',
+            record: record,
+            roles: roles
+        });
+
+    } catch (error) {
+        req.flash('error', 'Tài khoản không tồn tại');
+        console.log(res.locals.messages);
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+};
+
+// [PATCH] /admin/accounts/edit/:id
+module.exports.editPatch = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Kiểm tra email đã tồn tại ở tài khoản khác
+        const emailExist = await Account.findOne({
+            _id: { $ne: id },
+            email: req.body.email,
+            deleted: false
+        });
+
+        if (emailExist) {
+            req.flash("error", `Email ${req.body.email} đã tồn tại`);
+            return res.redirect(`${systemConfig.prefixAdmin}/accounts/edit/${id}`);
+        }
+
+        // Dữ liệu cần cập nhật
+        const dataUpdate = {
+            fullName: req.body.fullName,
+            email: req.body.email,
+            phone: req.body.phone,
+            role_id: req.body.role_id,
+            status: req.body.status
+        };
+
+        // Nếu có upload avatar mới
+        if (req.file) {
+            dataUpdate.avatar = req.file.path;
+        }
+
+        // Nếu nhập mật khẩu mới
+        if (req.body.password) {
+
+            // Kiểm tra xác nhận mật khẩu
+            if (
+                req.body.password !==
+                req.body.confirmPassword
+            ) {
+                req.flash("error", "Mật khẩu xác nhận không khớp!");
+
+                return res.redirect(`${systemConfig.prefixAdmin}/accounts/edit/${id}`);
+            }
+
+            dataUpdate.password = md5(req.body.password);
+        }
+
+        // Cập nhật tài khoản
+        await Account.updateOne(
+            {
+                _id: id,
+                deleted: false
+            },
+            {
+                $set: dataUpdate
+            }
+        );
+
+        req.flash("success", "Cập nhật tài khoản thành công!");
+
+        return res.redirect(`${systemConfig.prefixAdmin}/accounts/edit/${id}`);
+
+    } catch (error) {
+        console.log(error);
+
+        req.flash("error", "Có lỗi xảy ra, vui lòng thử lại!");
+
+        return res.redirect(`${systemConfig.prefixAdmin}/accounts/edit/${req.params.id}`);
+    }
+};
