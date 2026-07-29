@@ -7,59 +7,70 @@ include ../../mixins/sort.pug
 include ../../mixins/table-tree.pug 
 
 block main
-  +alert-success(5000)
-  +alert-error(5000)
-  h1 Danh mục sản phẩm
+  if role.permissions && role.permissions.includes("products-category_view")
+    
+    +alert-success(5000)
+    +alert-error(5000)
+    h1 Danh mục sản phẩm
 
-  .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          +filter-status(filterStatus)
-        .col-6
-          +search(keyword)
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filter-status(filterStatus)
+          .col-6
+            +search(keyword)
 
-  .card.mb-3
-    .card-header Hành động & Danh sách danh mục
-    .card-body
-      .row.mb-3
-        .col-8
-          +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
-        .col-4.text-end
-          a.btn.btn-outline-success(
-            href=`${prefixAdmin}/products-category/create`
-          ) + Thêm mới
- 
-      table.table.table-hover.table-sm(checkbox-multi)
-        thead
-          tr
-            th
-              input(type="checkbox" name="checkall")
-            th STT
-            th Hình ảnh
-            th Tiêu đề
-            th Vị trí
-            th Trạng thái
-            th Hành động
+    .card.mb-3
+      .card-header Hành động & Danh sách danh mục
+      .card-body
+        .row.mb-3
+          .col-8
+            +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
+          
+          .col-4.text-end
+            //- Phân quyền nút Thêm mới
+            if role.permissions.includes("products-category_create")
+              a.btn.btn-outline-success(
+                href=`${prefixAdmin}/products-category/create`
+              ) + Thêm mới
+  
+        table.table.table-hover.table-sm(checkbox-multi)
+          thead
+            tr
+              th
+                input(type="checkbox" name="checkall")
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Vị trí
+              th Trạng thái
+              th Hành động
 
-        tbody
-          if records && records.length > 0
-            - var count = 0 
-            +table-tree(records)
+          tbody
+            if records && records.length > 0
+              - var count = 0 
+              +table-tree(records)
 
+    form#form-change-status(
+      action='',
+      method='POST',
+      data-path=`${prefixAdmin}/products-category/change-status`
+    ) 
 
+    form#form-delete-item(
+      action='',
+      method='POST',
+      data-path=`${prefixAdmin}/products-category/delete`
+    ) 
 
-  form#form-change-status(
-    action='',
-    method='POST',
-    data-path=`${prefixAdmin}/products-category/change-status`
-  ) 
+    script(src='/admin/js/product.js')
 
-  form#form-delete-item(
-    action='',
-    method='POST',
-    data-path=`${prefixAdmin}/products-category/delete`
-  ) 
-
-  script(src='/admin/js/product.js')
+  else
+    //- Giao diện khi không có quyền xem
+    .card.shadow-sm
+      .card-body.text-center.py-5
+        h4.mb-3 Không có quyền truy cập
+        p.text-muted.mb-0
+          | Bạn không có quyền xem danh sách danh mục sản phẩm.

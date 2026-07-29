@@ -145,7 +145,6 @@ module.exports.edit = async (req, res) => {
 
   } catch (error) {
     req.flash('error', 'Danh mục không tồn tại');
-    console.log(res.locals.messages);
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
 };
@@ -167,7 +166,6 @@ module.exports.editPatch = async (req, res) => {
     req.flash('success', 'Cập nhật sản phẩm thành công!');
     res.redirect(`${systemConfig.prefixAdmin}/products-category/edit/${req.params.id}`);
   } catch (error) {
-    console.log(error);
     req.flash('error', 'Cập nhật thất bại!');
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
@@ -197,7 +195,6 @@ module.exports.detail = async (req, res) => {
       _id: req.params.id,
       deleted: false,
     });
-    console.log(record);
 
     res.render('admin/pages/products-category/detail', {
       pageTitle: 'Chi tiết danh mục',

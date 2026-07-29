@@ -2,36 +2,48 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  +alert-error(5000)
-  +alert-success(5000)
-  h1(class="mb-4") Chỉnh sửa nhóm quyền
+ 
+  if role.permissions && role.permissions.includes("roles_edit")
+    
+    +alert-error(5000)
+    +alert-success(5000)
+    h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-  form#form-edit-role(
-    action=`${prefixAdmin}/roles/edit/${record.id}?_method=PATCH`,
-    method="POST"
-  )
-    .form-group
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        value=`${record.title}`
-        required
-      ) 
+    form#form-edit-role(
+      action=`${prefixAdmin}/roles/edit/${record.id}?_method=PATCH`,
+      method="POST"
+    )
+      .form-group
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          value=`${record.title}`
+          required
+        ) 
 
-    .form-group.my-3 
-      label(for="desc") Mô tả
-      input(
-        type="text"
-        class="form-control"
-        id="desc"
-        name="description"
-        value=`${record.description}`
-      )
-    .form-group
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
+      .form-group.my-3 
+        label(for="desc") Mô tả
+        input(
+          type="text"
+          class="form-control"
+          id="desc"
+          name="description"
+          value=`${record.description}`
+        )
+        
+      .form-group
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+
+  else
+    //- Giao diện khi không có quyền truy cập
+    .card.shadow-sm
+      .card-body.text-center.py-5
+        h4.mb-3 Không có quyền truy cập
+        p.text-muted.mb-0
+          | Bạn không có quyền chỉnh sửa nhóm quyền.

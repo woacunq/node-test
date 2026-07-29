@@ -5,162 +5,158 @@ block main
   +alert-success(5000)
   +alert-error(5000)
 
-  h1(class="mb-4") Chỉnh sửa tài khoản
+  if role.permissions && role.permissions.includes("accounts_edit")
 
-  .card.mb-3
-    .card-header
-      | Chỉnh sửa tài khoản
+    h1(class="mb-4") Chỉnh sửa tài khoản
 
-    .card-body
-      form(
-        action=`${prefixAdmin}/accounts/edit/${record.id}?_method=PATCH`
-        method="POST"
-        enctype="multipart/form-data"
-      )
+    .card.mb-3
+      .card-header
+        | Chỉnh sửa tài khoản
 
-        //- Họ tên
-        .form-group
-          label(for="fullName") Họ tên
-          input.form-control(
-            type="text"
-            id="fullName"
-            name="fullName"
-            value=record.fullName
-            placeholder="Nhập họ tên"
-            required
-          )
+      .card-body
+        form(
+          action=`${prefixAdmin}/accounts/edit/${record.id}?_method=PATCH`
+          method="POST"
+          enctype="multipart/form-data"
+        )
 
-        //- Email
-        .form-group
-          label(for="email") Email
-          input.form-control(
-            type="email"
-            id="email"
-            name="email"
-            value=record.email
-            placeholder="Nhập email"
-            required
-          )
-        //- Thay đổi mật khẩu
-        .form-group
-          label(for="password") Mật khẩu mới
-
-          input.form-control(
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Nhập mật khẩu mới"
-          )
-
-          small.form-text.text-muted
-            | Để trống nếu không muốn thay đổi mật khẩu.
-
-        //- Xác nhận mật khẩu
-        .form-group
-          label(for="confirmPassword") Xác nhận mật khẩu mới
-
-          input.form-control(
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="Nhập lại mật khẩu mới"
-          )
-        //- Số điện thoại
-        .form-group
-          label(for="phone") Số điện thoại
-          input.form-control(
-            type="text"
-            id="phone"
-            name="phone"
-            value=record.phone
-            placeholder="Nhập số điện thoại"
-          )
-
-        //- Avatar hiện tại
-        .form-group
-          label Avatar hiện tại
-          br
-
-          if record.avatar
-            img(
-              src=record.avatar
-              alt=record.fullName
-              width="100"
-              height="100"
-              style="object-fit: cover; border-radius: 50%;"
+          .form-group
+            label(for="fullName") Họ tên
+            input.form-control(
+              type="text"
+              id="fullName"
+              name="fullName"
+              value=record.fullName
+              placeholder="Nhập họ tên"
+              required
             )
-          else
-            p.text-muted Chưa có avatar
 
-        //- Upload avatar mới
-        .form-group
-          label(for="avatar") Thay đổi avatar
-          input.form-control-file(
-            type="file"
-            id="avatar"
-            name="avatar"
-            accept="image/*"
-          )
+          .form-group
+            label(for="email") Email
+            input.form-control(
+              type="email"
+              id="email"
+              name="email"
+              value=record.email
+              placeholder="Nhập email"
+              required
+            )
 
-        
+          .form-group
+            label(for="password") Mật khẩu mới
+            input.form-control(
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Nhập mật khẩu mới"
+            )
+            small.form-text.text-muted
+              | Để trống nếu không muốn thay đổi mật khẩu.
 
-        //- Vai trò
-        .form-group
-          label(for="role_id") Vai trò
+          .form-group
+            label(for="confirmPassword") Xác nhận mật khẩu mới
+            input.form-control(
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Nhập lại mật khẩu mới"
+            )
 
-          select.form-control(
-            id="role_id"
-            name="role_id"
-          )
-            option(value="") -- Chọn vai trò --
+          .form-group
+            label(for="phone") Số điện thoại
+            input.form-control(
+              type="text"
+              id="phone"
+              name="phone"
+              value=record.phone
+              placeholder="Nhập số điện thoại"
+            )
 
-            if roles && roles.length > 0
-              each role in roles
-                if record.role_id && record.role_id._id.toString() == role._id.toString()
-                  option(
-                    value=role._id
-                    selected
-                  )= role.title
-                else
-                  option(
-                    value=role._id
-                  )= role.title
+          .form-group
+            label Avatar hiện tại
+            br
 
-        //- Trạng thái
-        .form-group
-          label(for="status") Trạng thái
-
-          select.form-control(
-            id="status"
-            name="status"
-          )
-            if record.status == "active"
-              option(
-                value="active"
-                selected
-              ) Hoạt động
-
-              option(
-                value="inactive"
-              ) Dừng hoạt động
+            if record.avatar
+              img(
+                src=record.avatar
+                alt=record.fullName
+                width="100"
+                height="100"
+                style="object-fit: cover; border-radius: 50%;"
+              )
             else
-              option(
-                value="active"
-              ) Hoạt động
+              p.text-muted Chưa có avatar
 
-              option(
-                value="inactive"
-                selected
-              ) Dừng hoạt động
+          .form-group
+            label(for="avatar") Thay đổi avatar
+            input.form-control-file(
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept="image/*"
+            )
 
-        //- Nút thao tác
-        .form-group.mt-3
-          button.btn.btn-primary(
-            type="submit"
-          )
-            | Cập nhật
+          .form-group
+            label(for="role_id") Vai trò
 
-          a.btn.btn-secondary.ml-2(
-            href=`${prefixAdmin}/accounts`
-          )
-            | Quay lại
+            select.form-control(
+              id="role_id"
+              name="role_id"
+            )
+              option(value="") -- Chọn vai trò --
+
+              if roles && roles.length > 0
+                each roleItem in roles
+                  if record.role_id && record.role_id._id.toString() == roleItem._id.toString()
+                    option(
+                      value=roleItem._id
+                      selected
+                    )= roleItem.title
+                  else
+                    option(
+                      value=roleItem._id
+                    )= roleItem.title
+
+          .form-group
+            label(for="status") Trạng thái
+
+            select.form-control(
+              id="status"
+              name="status"
+            )
+              if record.status == "active"
+                option(
+                  value="active"
+                  selected
+                ) Hoạt động
+
+                option(
+                  value="inactive"
+                ) Dừng hoạt động
+              else
+                option(
+                  value="active"
+                ) Hoạt động
+
+                option(
+                  value="inactive"
+                  selected
+                ) Dừng hoạt động
+
+          .form-group.mt-3
+            button.btn.btn-primary(
+              type="submit"
+            ) Cập nhật
+
+            a.btn.btn-secondary.ml-2(
+              href=`${prefixAdmin}/accounts`
+            ) Quay lại
+
+  else
+
+    .card.shadow-sm
+      .card-body.text-center.py-5
+        h4.mb-3 Không có quyền truy cập
+
+        p.text-muted.mb-0
+          | Bạn không có quyền chỉnh sửa tài khoản.

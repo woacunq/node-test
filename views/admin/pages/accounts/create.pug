@@ -1,100 +1,112 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-
 block main
   +alert-error(5000)
-  h1.mb-4 Thêm mới tài khoản
+  +alert-success(5000)
 
-  form(
-    action=`${prefixAdmin}/accounts/create`
-    method="POST"
-    enctype="multipart/form-data"
-  )
+  if role.permissions && role.permissions.includes("accounts_create")
 
-    .form-group.mb-3
-      label(for="fullName") Họ tên *
-      input.form-control(
-        type="text"
-        id="fullName"
-        name="fullName"
-        required
-      )
+    h1.mb-4 Thêm mới tài khoản
 
-    .form-group.mb-3
-      label(for="email") Email *
-      input.form-control(
-        type="email"
-        id="email"
-        name="email"
-        required
-      )
+    form(
+      action=`${prefixAdmin}/accounts/create`
+      method="POST"
+      enctype="multipart/form-data"
+    )
 
-    .form-group.mb-3
-      label(for="password") Mật khẩu *
-      input.form-control(
-        type="password"
-        id="password"
-        name="password"
-        required
-      )
+      .form-group.mb-3
+        label(for="fullName") Họ tên *
+        input.form-control(
+          type="text"
+          id="fullName"
+          name="fullName"
+          required
+        )
 
-    .form-group.mb-3
-      label(for="phone") Số điện thoại
-      input.form-control(
-        type="text"
-        id="phone"
-        name="phone"
-      )
+      .form-group.mb-3
+        label(for="email") Email *
+        input.form-control(
+          type="email"
+          id="email"
+          name="email"
+          required
+        )
 
-    .form-group.mb-3
-      label(for="avatar") Avatar
-      input.form-control(
-        type="file"
-        id="avatar"
-        name="avatar"
-      )
+      .form-group.mb-3
+        label(for="password") Mật khẩu *
+        input.form-control(
+          type="password"
+          id="password"
+          name="password"
+          required
+        )
 
-    .form-group.mb-3
-      label(for="role_id") Phân quyền
+      .form-group.mb-3
+        label(for="phone") Số điện thoại
+        input.form-control(
+          type="text"
+          id="phone"
+          name="phone"
+        )
 
-      select.form-control(
-        id="role_id"
-        name="role_id"
-        required
-      )
-        option(value="") -- Chọn quyền --
+      .form-group.mb-3
+        label(for="avatar") Avatar
+        input.form-control(
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+        )
 
-        if roles && roles.length > 0
-          each item in roles
-            option(value=item.id)= item.title
+      .form-group.mb-3
+        label(for="role_id") Phân quyền
+
+        select.form-control(
+          id="role_id"
+          name="role_id"
+          required
+        )
+          option(value="") -- Chọn quyền --
+
+          if roles && roles.length > 0
+            each item in roles
+              option(value=item.id)= item.title
 
       .form-group.mb-3
         label Trạng thái
 
-      .form-check
-        input.form-check-input(
-          type="radio"
-          id="active"
-          name="status"
-          value="active"
-          checked
-        )
-        label.form-check-label(for="active")
-          | Hoạt động
+        .form-check
+          input.form-check-input(
+            type="radio"
+            id="active"
+            name="status"
+            value="active"
+            checked
+          )
+          label.form-check-label(for="active")
+            | Hoạt động
 
-      .form-check
-        input.form-check-input(
-          type="radio"
-          id="inactive"
-          name="status"
-          value="inactive"
-        )
-        label.form-check-label(for="inactive")
-          | Dừng hoạt động
+        .form-check
+          input.form-check-input(
+            type="radio"
+            id="inactive"
+            name="status"
+            value="inactive"
+          )
+          label.form-check-label(for="inactive")
+            | Dừng hoạt động
 
+      button.btn.btn-primary(
+        type="submit"
+      )
+        | Tạo mới
 
-    button.btn.btn-primary(
-      type="submit"
-    )
-      | Tạo mới
+  else
+
+    .card.shadow-sm
+      .card-body.text-center.py-5
+        h4.mb-3 Không có quyền truy cập
+
+        p.text-muted.mb-0
+          | Bạn không có quyền thêm tài khoản.

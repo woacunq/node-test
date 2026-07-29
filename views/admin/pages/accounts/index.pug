@@ -3,94 +3,98 @@ include ../../mixins/alert.pug
 
 block main
   +alert-error(5000)
-  h1(class="mb-4") Danh sách tài khoản
+  +alert-success(5000)
 
-  .card.mb-3
-    .card-header
-      | Danh sách tài khoản
+  if role.permissions && role.permissions.includes("accounts_view")
 
-    .card-body
-      .row.mb-3
-        .col-8
+    h1(class="mb-4") Danh sách tài khoản
 
-        .col-4.text-right
-          a(
-            href=`${prefixAdmin}/accounts/create`
-            class="btn btn-outline-success"
-          )
-            | + Thêm mới
+    .card.mb-3
+      .card-header
+        | Danh sách tài khoản
 
-      if records && records.length > 0
-        .table-responsive
-          table.table.table-hover.table-bordered
-            thead
-              tr
-                th STT
-                th Avatar
-                th Họ tên
-                th Email
-                th Số điện thoại
-                th Vai trò
-                th Trạng thái
-                th Hành động
+      .card-body
+        .row.mb-3
+          .col-8
 
-            tbody
-              each item, index in records
+          .col-4.text-right
+            if role.permissions.includes("accounts_create")
+              a.btn.btn-outline-success(
+                href=`${prefixAdmin}/accounts/create`
+              ) + Thêm mới
+
+        if records && records.length > 0
+
+          .table-responsive
+            table.table.table-hover.table-bordered
+              thead
                 tr
-                  //- STT
-                  td= index + 1
+                  th STT
+                  th Avatar
+                  th Họ tên
+                  th Email
+                  th Số điện thoại
+                  th Vai trò
+                  th Trạng thái
+                  th Hành động
 
-                  //- Avatar
-                  td
-                    if item.avatar
-                      img(
-                        src=item.avatar
-                        alt=item.fullName
-                        width="50"
-                        height="50"
-                        style="object-fit: cover; border-radius: 50%;"
-                      )
-                    else
-                      | Chưa có
+              tbody
+                each item, index in records
+                  tr
+                    td= index + 1
 
-                  //- Họ tên
-                  td= item.fullName
-
-                  //- Email
-                  td= item.email
-
-                  //- Số điện thoại
-                  td= item.phone || "-"
-
-                  //- Vai trò
-                  td
-                    if item.role_id
-                      if item.role_id.title
-                        = item.role_id.title
+                    td
+                      if item.avatar
+                        img(
+                          src=item.avatar
+                          alt=item.fullName
+                          width="50"
+                          height="50"
+                          style="object-fit: cover; border-radius: 50%;"
+                        )
                       else
-                        = item.role_id
-                    else
-                      | Chưa phân quyền
+                        | Chưa có
 
-                  //- Trạng thái
-                  td
-                    if item.status == "active"
-                      span.bg-success Hoạt động
-                    else
-                      span.bg-danger Dừng hoạt động
+                    td= item.fullName
 
-                  //- Hành động
-                  td
-                    a.btn.btn-warning.btn-sm(
-                      href=`${prefixAdmin}/accounts/edit/${item.id}`
-                    )
-                      | Sửa
+                    td= item.email
 
-                    a.btn.btn-danger.btn-sm.ml-2(
-                      href=`${prefixAdmin}/accounts/delete/${item.id}`
-                    )
-                      | Xóa
+                    td= item.phone || "-"
 
-      else
-        .alert.alert-info
-          | Chưa có tài khoản nào.
+                    td
+                      if item.role_id
+                        if item.role_id.title
+                          = item.role_id.title
+                        else
+                          = item.role_id
+                      else
+                        | Chưa phân quyền
+
+                    td
+                      if item.status == "active"
+                        span.bg-success Hoạt động
+                      else
+                        span.bg-danger Dừng hoạt động
+
+                    td
+                      if role.permissions.includes("accounts_edit")
+                        a.btn.btn-warning.btn-sm(
+                          href=`${prefixAdmin}/accounts/edit/${item.id}`
+                        ) Sửa
+
+                      if role.permissions.includes("accounts_delete")
+                        a.btn.btn-danger.btn-sm.ml-2(
+                          href=`${prefixAdmin}/accounts/delete/${item.id}`
+                        ) Xóa
+
+        else
+          .alert.alert-info
+            | Chưa có tài khoản nào.
+
+  else
+    .card.shadow-sm
+      .card-body.text-center.py-5
+        h4.mb-3 Không có quyền truy cập
+
+        p.text-muted.mb-0
+          | Bạn không có quyền xem danh sách tài khoản.
