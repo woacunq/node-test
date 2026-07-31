@@ -4,6 +4,11 @@ module.exports.createPost = (req, res, next) => {
     res.redirect('/admin/products/create');
     return;
   }
+  if (!req.body.product_category_id) {
+    req.flash('error', 'Vui lòng chọn danh mục!');
+    res.redirect('/admin/products/create');
+    return;
+  }
   next();
 };
 module.exports.editPost = (req, res, next) => {

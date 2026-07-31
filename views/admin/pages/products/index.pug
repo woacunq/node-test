@@ -63,6 +63,7 @@ block main
             th Giá
             th Vị trí
             th Trạng thái
+            th Người tạo
             th Hành động
 
         tbody
@@ -97,7 +98,7 @@ block main
                   min='1',
                   name='position'
                 )
-
+              
               td 
                 if role.permissions.includes("products_edit")
                   if item.status === 'active'
@@ -125,6 +126,13 @@ block main
                     span.btn.btn-danger.text-nowrap(
                       style='width: 140px'
                     ) Dừng hoạt động
+              td 
+                if item.createdBy && item.createdBy.account_id 
+                  p= item.createdBy.account_id.fullName
+                  p= item.createdBy.createdAt.toLocaleString('vi-VN')
+                else    
+                  p Không xác định
+                  
               td
                 //- Chi tiết
                 a.btn.bg-secondary.text-black.p-1(

@@ -17,12 +17,29 @@ const productSchema = new mongoose.Schema(
     status: String,
     position: Number,
     slug: { type: String, slug: ['title'], unique: true }, //mỗi sản phẩm có 1 slug duy nhất
-    //
+    createdBy: {
+      account_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Account"
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    },
     deleted: {
       type: Boolean,
       default: false, // Mặc định sản phẩm mới tạo là CHƯA xóa
     },
-    deleteAt: Date,
+    deletedBy: {
+      account_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Account"
+      },
+      deletedAt: {
+        type: Date,
+      }
+    },
   },
   {
     timestamps: true, //mongo tao 2 properties createAt va updateAt

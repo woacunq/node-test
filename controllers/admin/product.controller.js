@@ -54,7 +54,7 @@ module.exports.index = async (req, res) => {
   const products = await Product.find(find)
     .sort(sort)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
+    .skip(objectPagination.skip).populate("createdBy.account_id", "fullName");
 
 
   res.render('admin/pages/products/index', {
@@ -134,6 +134,7 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
+
   const categories = await ProductsCategory.find({ deleted: false })
 
 
@@ -154,6 +155,10 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
+
+  req.body.createdBy = {
+    account_id: res.locals.user.id
+  };
 
   const product = new Product(req.body);
   await product.save();
