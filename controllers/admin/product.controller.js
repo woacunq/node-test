@@ -97,7 +97,13 @@ module.exports.changeMulti = async (req, res) => {
     case 'delete-all':
       await Product.updateMany(
         { _id: { $in: ids } },
-        { deleted: true, deleteAt: new Date() },
+        {
+          deleted: true,
+          deletedBy: {
+            account_id: res.locals.user.id,
+            deletedAt: new Date()
+          }
+        },
       );
       req.flash('success', `${ids.length} sản phẩm đã được xóa!`);
       break;
@@ -125,7 +131,16 @@ module.exports.deleteItem = async (req, res) => {
   // await Product.deleteOne({ _id: id });
 
   // Xoa mem
-  await Product.updateOne({ _id: id }, { deleted: true, deleteAt: new Date() });
+  await Product.updateOne({
+    _id: id
+  },
+    {
+      deleted: true,
+      deletedBy: {
+        account_id: res.locals.user.id,
+        deletedAt: new Date()
+      }
+    });
 
   req.flash('success', `Đã xóa sản phẩm!`);
 
@@ -204,12 +219,13 @@ module.exports.editPatch = async (req, res) => {
     } else {
       req.body.position = parseInt(req.body.position);
     }
+    console.log(req.body);
+
 
     await Product.updateOne({ _id: req.params.id }, req.body);
     req.flash('success', 'Cập nhật sản phẩm thành công!');
     res.redirect(`${systemConfig.prefixAdmin}/products/edit/${req.params.id}`);
   } catch (error) {
-    console.log(error);
     req.flash('error', 'Cập nhật thất bại!');
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
