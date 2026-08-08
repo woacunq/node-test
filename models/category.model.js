@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
 const ProductsCategory = mongoose.model(
   'ProductsCategory',  // modelName
   productSchema,  // schema
-  'categorys',  // collectionName
+  'categories',  // collectionName
 );
 
 module.exports = ProductsCategory;
