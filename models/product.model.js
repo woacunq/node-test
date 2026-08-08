@@ -40,10 +40,17 @@ const productSchema = new mongoose.Schema(
         type: Date,
       }
     },
+    updatedBy: [
+      {
+        account_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Account"
+        },
+        updatedAt: Date,
+      }
+    ]
   },
-  {
-    timestamps: true, //mongo tao 2 properties createAt va updateAt
-  },
+
 );
 
 const Product = mongoose.model('Product', productSchema, 'products');

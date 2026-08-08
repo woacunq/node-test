@@ -30,110 +30,108 @@
   display: flex;
 }
 
-/* SIDEBAR */
+/* =========================
+   SIDEBAR
+========================= */
 
 .sider {
-  width: 220px;
-  min-height: calc(100vh - 60px);
-  background: #2f2f2f;
-  color: white;
-  padding: 20px 15px;
+    width: 200px;
+    min-height: calc(100vh - 60px);
+    background: #2f2f2f;
+    color: white;
+    padding: 15px;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
-/* MENU SIDEBAR */
 
-.sider ul {
-  list-style: none;
-}
-
-.sider li {
-  margin-bottom: 10px;
-}
-
-.sider a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  padding: 8px 10px;
-  border-radius: 4px;
-}
-
-.sider a:hover {
-  background: #0d6efd;
-}
-
-/* MAIN CONTENT */
-
-.main {
-  flex: 1;
-  background: #f1f1f1;
-  padding: 25px;
-}
-
-/* TITLE */
-
-.main h1 {
-  font-size: 28px;
-  font-weight: 600;
-}
-/* SIDEBAR */
-
-.sider {
-  width: 220px;
-  min-height: calc(100vh - 60px);
-  background: #2f2f2f;
-  color: white;
-  padding: 15px;
-}
-
-/* MENU */
+/* =========================
+   MENU SIDEBAR
+========================= */
 
 .menu {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .menu > li {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
-/* MENU LINK */
+
+/* =========================
+   MENU LINK
+========================= */
 
 .menu a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 8px 10px;
-  border-radius: 4px;
+    display: block;
+
+    color: white;
+    text-decoration: none;
+
+    padding: 10px 12px;
+
+    border-radius: 4px;
 }
 
 .menu a:hover {
-  background: #0d6efd;
+    background: #0d6efd;
 }
 
-/* SUB MENU */
+
+/* =========================
+   SUB MENU
+========================= */
 
 .inner-menu ul {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .inner-menu li {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
-/* MENU LINK */
-
 .inner-menu a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 8px 10px;
-  border-radius: 4px;
+    display: block;
+
+    color: white;
+    text-decoration: none;
+
+    padding: 10px 12px;
+
+    border-radius: 4px;
 }
 
 .inner-menu a:hover {
-  background: #0d6efd;
+    background: #0d6efd;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main {
+    flex: 1;
+
+    background: #f1f1f1;
+
+    padding: 25px;
+
+    min-width: 0;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.main h1 {
+    font-size: 28px;
+    font-weight: 600;
 }
 
 /* Pagination */

@@ -5,27 +5,27 @@
       li
         a(href=`${prefixAdmin}/dashboard`) Dashboard
 
-      //- Sản phẩm
-      if role.permissions.includes("products_view")
-        li
-          a(href=`${prefixAdmin}/products`) Products
-
       //- Danh mục sản phẩm
       if role.permissions.includes("products-category_view")
         li
-          a(href=`${prefixAdmin}/products-category`) Categories
+          a(href=`${prefixAdmin}/products-category`) Danh mục sản phẩm
+
+      //- Sản phẩm
+      if role.permissions.includes("products_view")
+        li
+          a(href=`${prefixAdmin}/products`) Danh sách sản phẩm
 
       //- Nhóm quyền
       if role.permissions.includes("roles_view")
         li
-          a(href=`${prefixAdmin}/roles`) Roles
+          a(href=`${prefixAdmin}/roles`) Nhóm quyền 
 
       //- Phân quyền
       if role.permissions.includes("roles_permissions")
         li
-          a(href=`${prefixAdmin}/roles/permissions`) Permissions
+          a(href=`${prefixAdmin}/roles/permissions`) Phân quyền
 
       //- Tài khoản
       if role.permissions.includes("accounts_view")
         li
-          a(href=`${prefixAdmin}/accounts`) Accounts
+          a(href=`${prefixAdmin}/accounts`) Danh sách tài khoản

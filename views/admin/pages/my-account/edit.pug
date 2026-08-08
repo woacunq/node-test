@@ -1,0 +1,110 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(5000)
+    +alert-error(5000)
+
+
+    h1(class="mb-4") Chỉnh sửa thông tin cá nhân
+
+    .card.mb-3
+        .card-header
+            | Thông tin cá nhân
+
+        .card-body
+            form(
+                action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+                method="POST"
+                enctype="multipart/form-data"
+            )
+
+                .form-group.mb-3
+                    label(for="fullName") Họ tên
+                    input.form-control(
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        value=user.fullName
+                        placeholder="Nhập họ tên"
+                        required
+                    )
+
+                .form-group.mb-3
+                    label(for="email") Email
+                    input.form-control(
+                        type="email"
+                        id="email"
+                        name="email"
+                        value=user.email
+                        placeholder="Nhập email"
+                        required
+                    )
+
+                .form-group.mb-3
+                    label(for="phone") Số điện thoại
+                    input.form-control(
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value=user.phone
+                        placeholder="Nhập số điện thoại"
+                    )
+
+                .form-group.mb-3
+                    label Avatar hiện tại
+                    br
+
+                    if user.avatar
+                        img(
+                            src=user.avatar
+                            alt=user.fullName
+                            width="100"
+                            height="100"
+                            style="object-fit: cover; border-radius: 50%;"
+                        )
+                    else
+                        p.text-muted Chưa có avatar
+
+                .form-group.mb-3
+                    label(for="avatar") Thay đổi avatar
+                    input.form-control-file(
+                        type="file"
+                        id="avatar"
+                        name="avatar"
+                        accept="image/*"
+                    )
+
+                hr
+
+                h5.mb-3 Đổi mật khẩu
+
+                .form-group.mb-3
+                    label(for="password") Mật khẩu mới
+                    input.form-control(
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Nhập mật khẩu mới"
+                    )
+                    small.form-text.text-muted
+                        | Để trống nếu không muốn thay đổi mật khẩu.
+
+                .form-group.mb-3
+                    label(for="confirmPassword") Xác nhận mật khẩu mới
+                    input.form-control(
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Nhập lại mật khẩu mới"
+                    )
+
+                .form-group.mt-3
+                    button.btn.btn-primary(
+                        type="submit"
+                    ) Cập nhật
+
+                    a.btn.btn-secondary.ml-2(
+                        href=`${prefixAdmin}/my-account`
+                    ) Quay lại
+

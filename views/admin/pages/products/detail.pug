@@ -1,63 +1,88 @@
 extends ../../layouts/default.pug
 
 block main
-  if product.title
-    h1.mb-4 #{product.title}
+
+  - const lastUpdate = product.updatedBy && product.updatedBy.length > 0 ? product.updatedBy[product.updatedBy.length - 1] : null
+
+  h1.mb-4= product.title
 
   if product.product_category_id
     .mb-4
-      span Danh mục: 
-      b #{product.product_category_id.title ? product.product_category_id.title : product.product_category_id}
+      span Danh mục:
+      b.ms-2= product.product_category_id.title
 
   if product.price
     .mb-4
-      span Giá: 
-      b #{product.price}$
+      span Giá:
+      b.ms-2 #{product.price}$
 
   if product.discountPercentage
     .mb-4
-      span Giảm giá: 
-      b #{product.discountPercentage}%
+      span Giảm giá:
+      b.ms-2 #{product.discountPercentage}%
 
   if product.stock
     .mb-4
-      span Còn lại: 
-      b #{product.stock}
+      span Còn lại:
+      b.ms-2= product.stock
 
   if product.thumbnail
     .mb-4
       img(
         src=product.thumbnail
         alt=product.title
-        style='width: 150px; height: auto; border-radius: 5px; object-fit: cover;'
+        style="width:150px;border-radius:6px"
       )
 
   if product.status
     .mb-4
-      span Trạng thái: 
-      if product.status === 'active'
-        span.badge.bg-success Hoạt động
+      span Trạng thái:
+      if product.status === "active"
+        span.badge.bg-success.ms-2 Hoạt động
       else
-        span.badge.bg-danger Dừng hoạt động
+        span.badge.bg-danger.ms-2 Dừng hoạt động
 
   if product.position
     .mb-4
-      span Vị trí: 
-      b #{product.position}
+      span Vị trí:
+      b.ms-2= product.position
 
   if product.description
-    .mb-4 
-      span <b>Mô tả sản phẩm:</b>
-      div.mt-2 !{product.description}
+    .mb-4
+      h5 Mô tả
+      .border.rounded.p-3
+        != product.description
+
+  hr
+
+  h4.mb-3 Thông tin hệ thống
+
+  if product.createdBy
+    .mb-3
+      span Người tạo:
+      b.ms-2= product.createdBy.account_id.fullName
+
+    .mb-3
+      span Ngày tạo:
+      b.ms-2= formatDate(product.createdBy.createdAt)
+
+  if lastUpdate
+    .mb-3
+      span Người chỉnh sửa gần nhất:
+      b.ms-2= lastUpdate.account_id.fullName
+
+    .mb-3
+      span Thời gian chỉnh sửa:
+      b.ms-2= formatDate(lastUpdate.updatedAt)
 
   hr
 
   a.btn.btn-warning.me-2(
     href=`${prefixAdmin}/products/edit/${product._id}`
-  ) Chỉnh sửa sản phẩm
-  
+  ) Chỉnh sửa
+
   a.btn.btn-secondary(
     href=`${prefixAdmin}/products`
-  ) Quay lại danh sách
+  ) Quay lại
 
-  script(src='/admin/js/product.js')
+  script(src="/admin/js/product.js")

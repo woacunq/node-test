@@ -54,11 +54,12 @@ module.exports.index = async (req, res) => {
   const products = await Product.find(find)
     .sort(sort)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip).populate("createdBy.account_id", "fullName");
-
+    .skip(objectPagination.skip)
+    .populate("createdBy.account_id", "fullName")
+    .populate("updatedBy.account_id", "fullName");
 
   res.render('admin/pages/products/index', {
-    pageTitle: 'Trang danh sach san pham',
+    pageTitle: 'Danh sách sản phẩm',
     products: products,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
@@ -80,21 +81,39 @@ module.exports.changeStatus = async (req, res) => {
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
+  const ids = req.body.ids.split(",").map(id => id.trim());
 
-  const ids = req.body.ids.split(',').map((id) => id.trim());
-  console.log('Hành động là:', req.body.type);
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date()
+  };
+
   switch (type) {
-    case 'active':
-      await Product.updateMany({ _id: { $in: ids } }, { status: 'active' });
-      req.flash(
-        'success',
-        `${ids.length} sản phẩm đã được cập nhật trạng thái!`,
+    case "active":
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        {
+          status: "active",
+          $push: { updatedBy }
+        }
       );
+
+      req.flash("success", `${ids.length} sản phẩm đã được cập nhật trạng thái!`);
       break;
-    case 'inactive':
-      await Product.updateMany({ _id: { $in: ids } }, { status: 'inactive' });
+
+    case "inactive":
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        {
+          status: "inactive",
+          $push: { updatedBy }
+        }
+      );
+
+      req.flash("success", `${ids.length} sản phẩm đã được cập nhật trạng thái!`);
       break;
-    case 'delete-all':
+
+    case "delete-all":
       await Product.updateMany(
         { _id: { $in: ids } },
         {
@@ -103,25 +122,32 @@ module.exports.changeMulti = async (req, res) => {
             account_id: res.locals.user.id,
             deletedAt: new Date()
           }
-        },
+        }
       );
-      req.flash('success', `${ids.length} sản phẩm đã được xóa!`);
+
+      req.flash("success", `${ids.length} sản phẩm đã được xóa!`);
       break;
-    case 'change-position':
-      for (const item of ids) {
-        let [id, position] = item.split('-');
-        position = parseInt(position);
-        // console.log(id);
-        // console.log(position);
-        await Product.updateOne({ _id: id }, { position: position });
-      }
-      req.flash('success', `${ids.length} sản phẩm đã được cập nhật vị trí!`);
-      break;
-    default:
+
+    case "change-position":
+      await Promise.all(
+        ids.map(item => {
+          const [id, position] = item.split("-");
+
+          return Product.updateOne(
+            { _id: id },
+            {
+              position: Number(position),
+              $push: { updatedBy }
+            }
+          );
+        })
+      );
+
+      req.flash("success", `${ids.length} sản phẩm đã được cập nhật vị trí!`);
       break;
   }
 
-  res.redirect(req.get('Referrer') || '/admin/products');
+  res.redirect(req.get("Referrer") || "/admin/products");
 };
 
 // [DELETE] /admin/products/delete/:id
@@ -201,7 +227,6 @@ module.exports.edit = async (req, res) => {
     });
   } catch (error) {
     req.flash('error', 'Sản phẩm không tồn tại');
-    console.log(res.locals.messages);
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
 };
@@ -219,10 +244,16 @@ module.exports.editPatch = async (req, res) => {
     } else {
       req.body.position = parseInt(req.body.position);
     }
-    console.log(req.body);
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date()
+    }
 
 
-    await Product.updateOne({ _id: req.params.id }, req.body);
+    await Product.updateOne({ _id: req.params.id }, {
+      ...req.body,
+      $push: { updatedBy: updatedBy }
+    });
     req.flash('success', 'Cập nhật sản phẩm thành công!');
     res.redirect(`${systemConfig.prefixAdmin}/products/edit/${req.params.id}`);
   } catch (error) {
@@ -234,13 +265,14 @@ module.exports.editPatch = async (req, res) => {
 // [GET] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
   try {
-    const id = req.params.id;
 
     const product = await Product.findOne({
-      _id: id,
+      _id: req.params.id,
       deleted: false
     })
-      .populate("product_category_id");
+      .populate("product_category_id", "title")
+      .populate("createdBy.account_id", "fullName")
+      .populate("updatedBy.account_id", "fullName");
 
     res.render("admin/pages/products/detail", {
       pageTitle: "Chi tiết sản phẩm",

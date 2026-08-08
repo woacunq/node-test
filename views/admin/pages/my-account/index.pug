@@ -1,0 +1,62 @@
+extends ../../layouts/default.pug
+
+block main
+    .container-fluid
+        h1.mb-4 Trang cá nhân
+
+        .card
+            .card-header
+                h5.mb-0 Thông tin tài khoản
+
+            .card-body
+                .row
+                    .col-md-3.text-center
+                        if user.avatar
+                            img.rounded-circle(
+                                src=user.avatar
+                                alt="Avatar"
+                                width="150"
+                                height="150"
+                            )
+                        else
+                            p Chưa có avatar
+                        
+                       
+                    .col-md-9
+                        .mb-3
+                            strong Họ và tên:
+                            p= user.fullName
+
+                        .mb-3
+                            strong Email:
+                            p= user.email
+
+                        .mb-3
+                            strong Số điện thoại:
+                            p= user.phone || "Chưa cập nhật"
+
+                        .mb-3
+                            strong Vai trò:
+                            if user.role_id
+                                p= user.role_id.title
+                                //- p= role.title
+                            else
+                                p Chưa phân quyền
+
+                        .mb-3
+                            strong Trạng thái:
+                            if user.status === "active"
+                                span.badge.bg-success Hoạt động
+                            else
+                                span.badge.bg-danger Không hoạt động
+
+                        .mb-3
+                            strong Ngày tạo:
+                            if user.createdAt
+                                p= user.createdAt.toLocaleDateString("vi-VN")
+                            else
+                                p Chưa cập nhật
+                        .mb-3
+                            a.btn.btn-primary(
+                                href=`${prefixAdmin}/my-account/edit`
+                                )  Chỉnh sửa thông tin
