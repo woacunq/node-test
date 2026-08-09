@@ -46,7 +46,33 @@ block main
           if categories && categories.length > 0
             - const currentCategoryId = product.product_category_id ? product.product_category_id.toString() : ""
             +select-tree(categories, 0, currentCategoryId)
+      //- Sản phẩm nổi bật
+      .form-group
+        label Sản phẩm nổi bật
 
+        br
+
+        .form-check.form-check-inline
+          input#featuredYes.form-check-input(
+            type="radio",
+            name="featured",
+            value="true",
+            checked=(product.featured=="true"? true: false)
+          )
+
+          label.form-check-label(for="featuredYes")
+            | Có
+
+        .form-check.form-check-inline
+          input#featuredNo.form-check-input(
+            type="radio",
+            name="featured",
+            value="false",
+            checked=(product.featured=="false"? true: false)
+          )
+
+          label.form-check-label(for="featuredNo")
+            | Không
       //- Giá
       .form-group
         label(for='price') Giá

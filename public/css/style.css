@@ -106,3 +106,127 @@
 .inner-menu li ul li:hover > a {
     background: #eee;
 }
+
+
+/* =========================
+   PRODUCT ITEM
+========================= */
+
+.product-item {
+    position: relative;
+
+    height: 100%;
+
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.product-item .inner-image {
+    width: 100%;
+    height: 250px;
+}
+
+.product-item .inner-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.product-item .inner-content {
+    padding: 15px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.product-item .inner-title {
+    margin: 0 0 10px;
+
+    font-size: 18px;
+}
+
+.product-item .inner-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.product-item .inner-title a:hover {
+    color: #007bff;
+}
+
+
+/* =========================
+   FEATURED
+========================= */
+
+.product-item .inner-featured {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    padding: 3px 6px;
+
+    background: green;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    border-radius: 8px;
+}
+
+
+/* =========================
+   PRICE
+========================= */
+
+.product-item .inner-price-new {
+    margin-bottom: 5px;
+
+    color: red;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.product-item .inner-price-old {
+    margin-bottom: 5px;
+
+    color: #999;
+
+    font-size: 14px;
+    text-decoration: line-through;
+}
+
+
+/* =========================
+   DISCOUNT
+========================= */
+
+.product-item .inner-discount {
+    display: inline-block;
+
+    padding: 3px 6px;
+
+    background: #f1f1f1;
+    color: red;
+
+    font-size: 13px;
+}
