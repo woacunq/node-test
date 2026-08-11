@@ -11,7 +11,7 @@ module.exports.index = async (req, res) => {
     deleted: 'false',
   }).sort({ position: 'desc' });
 
-  const newProducts = productHelper.priceNewProduct(products)
+  const newProducts = productHelper.priceNewProducts(products)
 
   res.render('client/pages/products/index', {
     pageTitle: 'Danh sách sản phẩm',
@@ -19,15 +19,22 @@ module.exports.index = async (req, res) => {
   });
 };
 
-// [GET] /:slug
+// [GET] /product/detail/:slugProduct
 module.exports.detail = async (req, res) => {
   try {
     const product = await Product.findOne({
-      slug: req.params.slug,
-      deleted: 'false',
+      slug: req.params.slugProduct,
+      deleted: false,
       status: 'active',
-    });
+    }).populate("product_category_id", "title slug");
 
+
+    if (!product) {
+      req.flash('error', 'Sản phẩm không tồn tại');
+      return res.redirect('/products');
+    }
+
+    product.priceNew = productHelper.priceNewProduct(product)
     res.render('client/pages/products/detail', {
       pageTitle: product.title,
       product: product,
@@ -38,9 +45,8 @@ module.exports.detail = async (req, res) => {
   }
 };
 
-// [GET] /:slug
+// [GET] /product/category:slugCategory
 module.exports.category = async (req, res) => {
-  console.log(req.params.slugCategory);
 
   const category = await ProductCategory.findOne({
     slug: req.params.slugCategory,
@@ -48,14 +54,19 @@ module.exports.category = async (req, res) => {
     deleted: false
   })
 
+  if (!category) {
+    return res.redirect("/products");
+  }
+
   const listSubCategoryId = await getSubCategoryIds(category.id);
 
   const products = await Product.find({
     product_category_id: { $in: [category.id, ...listSubCategoryId] },
     deleted: false
   }).sort({ position: "desc" })
+ 
 
-  const newProducts = productHelper.priceNewProduct(products)
+  const newProducts = productHelper.priceNewProducts(products)
 
   res.render('client/pages/products/index', {
     pageTitle: category.title,

@@ -6,7 +6,7 @@ mixin product-item(item)
 
             .inner-content
                 h3.inner-title
-                    a(href=`/products/${item.slug}`)= item.title
+                    a(href=`/products/detail/${item.slug}`)= item.title
 
                 if item.featured
                     .inner-featured Nổi bật

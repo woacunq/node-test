@@ -174,17 +174,23 @@ module.exports.editPatch = async (req, res) => {
 
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
-  if (req.body.position == '') {
-    const countProducts = await ProductsCategory.countDocuments();
-    req.body.position = countProducts + 1;
-  } else {
-    req.body.position = parseInt(req.body.position);
-  }
-  console.log(req.body);
+  const permission = res.locals.role.permissions
+  if (permission.includes("product-category_create")) {
 
-  const record = new ProductsCategory(req.body);
-  await record.save();
-  res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+    if (req.body.position == '') {
+      const countProducts = await ProductsCategory.countDocuments();
+      req.body.position = countProducts + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+
+    const record = new ProductsCategory(req.body);
+    await record.save();
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  } else {
+    res.send("403")
+    return
+  }
 };
 
 

@@ -1,41 +1,122 @@
 extends ../../layouts/default.pug
 
 block main
-  .container.my-4
-    .row
-      //- Ảnh sản phẩm
-      .col-md-5
-        if product.thumbnail
-          img.img-fluid.rounded.border(
-            src=product.thumbnail,
-            alt=product.title
-          )
+  .product-detail
+    .container.my-5
+
+      //- Breadcrumb
+      .product-breadcrumb
+        a(href="/") Trang chủ
+        span /
+        span= product.title
 
       //- Thông tin sản phẩm
-      .col-md-7
-        h1.mb-4 #{ product.title }
+      .product-detail-card
+        .row
 
-        if product.price
-          .mb-3
-            span.font-weight-bold Giá:
-            b.text-danger.ml-2 #{ product.price }$
+          //- =========================
+          //- ẢNH SẢN PHẨM
+          //- =========================
+          .col-lg-6
+            .product-image-wrapper
+              if product.thumbnail
+                img.product-detail-image(
+                  src=product.thumbnail,
+                  alt=product.title
+                )
+              else
+                .product-no-image
+                  | Không có hình ảnh
 
-        if product.discountPercentage
-          .mb-3
-            span.font-weight-bold Giảm giá:
-            b.text-success.ml-2 #{ product.discountPercentage }%
+          //- =========================
+          //- THÔNG TIN SẢN PHẨM
+          //- =========================
+          .col-lg-6
+            .product-detail-content
 
-        if product.stock
-          .mb-3
-            span.font-weight-bold Còn lại:
-            b.ml-2 #{ product.stock }
+              //- Tên sản phẩm
+              h1.product-detail-title= product.title
 
-        if product.position
-          .mb-3
-            span.font-weight-bold Vị trí:
-            b.ml-2 #{ product.position }
+              //- Danh mục
+              if product.product_category_id
+                .product-category
+                  span.category-label Danh mục:
+                  a.category-name(
+                    href=`/products/category/${product.product_category_id.slug}`
+                  )
+                    | #{product.product_category_id.title}
 
-        if product.description
-          .mb-3
-            span.font-weight-bold Mô tả:
-            p.mt-2 #{ product.description }
+              //- Trạng thái
+              .product-status
+                if product.stock > 0
+                  span.status-dot
+                  span Còn hàng
+                else
+                  span.status-dot.out-of-stock
+                  span Hết hàng
+
+              //- Giá
+              .product-price-box
+                if product.priceNew
+                  span.product-price-new
+                    | #{product.priceNew}$
+
+                  if product.discountPercentage
+                    span.product-price-old
+                      del #{product.price}$
+
+                else if product.price
+                  span.product-price-new
+                    | #{product.price}$
+
+              //- Giảm giá
+              if product.discountPercentage
+                .product-discount
+                  | -#{product.discountPercentage}% GIẢM
+
+              //- Thông tin sản phẩm
+              .product-info-list
+
+                if product.stock != null
+                  .product-info-item
+                    span.label Số lượng:
+                    span.value #{product.stock}
+
+                if product.position != null
+                  .product-info-item
+                    span.label Vị trí:
+                    span.value #{product.position}
+
+                if product.discountPercentage
+                  .product-info-item
+                    span.label Tiết kiệm:
+                    span.value
+                      | #{product.price - product.priceNew}$
+
+              //- Nút mua hàng
+              .product-actions
+                button.btn.btn-primary.btn-buy(
+                  type="button"
+                )
+                  | Thêm vào giỏ hàng
+
+                button.btn.btn-outline-secondary.btn-buy-now(
+                  type="button"
+                )
+                  | Mua ngay
+
+          //- =========================
+          //- MÔ TẢ SẢN PHẨM
+          //- =========================
+          .col-12
+            .product-description-section
+
+              h2.product-section-title
+                | Mô tả sản phẩm
+
+              if product.description
+                .product-description
+                  | !{product.description}
+              else
+                p.text-muted
+                  | Chưa có mô tả cho sản phẩm này.
