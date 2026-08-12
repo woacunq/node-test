@@ -1,16 +1,22 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug 
 
 block main
+  +alert-success(3000)
   .product-detail
     .container.my-5
 
-      //- Breadcrumb
+      //- =========================
+      //- BREADCRUMB
+      //- =========================
       .product-breadcrumb
         a(href="/") Trang chủ
         span /
         span= product.title
 
-      //- Thông tin sản phẩm
+      //- =========================
+      //- THÔNG TIN SẢN PHẨM
+      //- =========================
       .product-detail-card
         .row
 
@@ -21,7 +27,7 @@ block main
             .product-image-wrapper
               if product.thumbnail
                 img.product-detail-image(
-                  src=product.thumbnail,
+                  src=product.thumbnail
                   alt=product.title
                 )
               else
@@ -29,7 +35,7 @@ block main
                   | Không có hình ảnh
 
           //- =========================
-          //- THÔNG TIN SẢN PHẨM
+          //- THÔNG TIN CHI TIẾT
           //- =========================
           .col-lg-6
             .product-detail-content
@@ -43,8 +49,7 @@ block main
                   span.category-label Danh mục:
                   a.category-name(
                     href=`/products/category/${product.product_category_id.slug}`
-                  )
-                    | #{product.product_category_id.title}
+                  )= product.product_category_id.title
 
               //- Trạng thái
               .product-status
@@ -55,7 +60,7 @@ block main
                   span.status-dot.out-of-stock
                   span Hết hàng
 
-              //- Giá
+              //- Giá sản phẩm
               .product-price-box
                 if product.priceNew
                   span.product-price-new
@@ -69,7 +74,7 @@ block main
                   span.product-price-new
                     | #{product.price}$
 
-              //- Giảm giá
+              //- Phần trăm giảm giá
               if product.discountPercentage
                 .product-discount
                   | -#{product.discountPercentage}% GIẢM
@@ -80,12 +85,12 @@ block main
                 if product.stock != null
                   .product-info-item
                     span.label Số lượng:
-                    span.value #{product.stock}
+                    span.value= product.stock
 
                 if product.position != null
                   .product-info-item
                     span.label Vị trí:
-                    span.value #{product.position}
+                    span.value= product.position
 
                 if product.discountPercentage
                   .product-info-item
@@ -93,13 +98,49 @@ block main
                     span.value
                       | #{product.price - product.priceNew}$
 
-              //- Nút mua hàng
+              //- =========================
+              //- THÊM VÀO GIỎ HÀNG
+              //- =========================
               .product-actions
-                button.btn.btn-primary.btn-buy(
-                  type="button"
-                )
-                  | Thêm vào giỏ hàng
 
+                if product.stock > 0
+                  form(
+                    action=`/cart/add/${product.id}`
+                    method="POST"
+                  )
+                    //- ID sản phẩm
+                    input(
+                      type="hidden"
+                      name="productId"
+                      value=product.id
+                    )
+
+                    //- Số lượng
+                    .quantity-box
+                      label(for="quantity") Số lượng:
+                      input(
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        max=product.stock
+                      )
+
+                    //- Nút thêm giỏ hàng
+                    button.btn.btn-primary.btn-buy(
+                      type="submit"
+                    )
+                      | Thêm vào giỏ hàng
+
+                else
+                  button.btn.btn-secondary.btn-buy(
+                    type="button"
+                    disabled
+                  )
+                    | Hết hàng
+
+                //- Mua ngay
                 button.btn.btn-outline-secondary.btn-buy-now(
                   type="button"
                 )
