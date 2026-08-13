@@ -14,3 +14,13 @@ module.exports.priceNewProduct = (product) => {
     ).toFixed(0)
     return priceNew
 }
+
+module.exports.priceNewProductsCart = (products) => {
+    const newProducts = products.map((item) => {
+        item.product_id.priceNew = (
+            (item.product_id.price * (100 - item.product_id.discountPercentage)) / 100).toFixed(0)
+        return item
+
+    })
+    return newProducts
+}

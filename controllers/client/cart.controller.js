@@ -1,5 +1,77 @@
 const Cart = require("../../models/cart.model")
-const Product = require('../../models/product.model');
+const productHelper = require("../../helpers/product")
+
+// [GET] /cart
+module.exports.index = async (req, res) => {
+    const cartId = req.cookies.cartId
+
+    const cart = await Cart.findOne({
+        _id: cartId
+    })
+        .populate("products.product_id")
+        .lean()
+
+    if (!cart || cart.products.length === 0) {
+        return res.render("client/pages/cart/index", {
+            pageTitle: "Giỏ hàng",
+            cartDetail: {
+                products: [],
+                totalPrice: 0
+            }
+        })
+    }
+
+    const products = productHelper.priceNewProductsCart(cart.products)
+
+    const totalPrice = products.reduce(
+        (sum, item) => sum + item.product_id.priceNew * item.quantity,
+        0
+    )
+
+    res.render("client/pages/cart/index", {
+        pageTitle: "Giỏ hàng",
+        cartDetail: {
+            products,
+            totalPrice
+        }
+    })
+}
+
+
+
+// const Cart = require("../../models/cart.model")
+// const Product = require('../../models/product.model');
+
+// const productHelper = require("../../helpers/product")
+
+// // [GET] /cart
+// module.exports.index = async (req, res) => {
+
+//     const cartId = req.cookies.cartId
+//     const cart = await Cart.findOne({
+//         _id: cartId
+//     }).populate("products.product_id")
+//     // console.log(cart.products);
+//     if (cart.products.length > 0) {
+//         const newProducts = productHelper.priceNewProductsCart(cart.products)
+
+//         newProducts.totalPrice = cart.products.reduce(
+//             (sum, item) => sum + (item.product_id.priceNew * item.quantity), 0)
+//         console.log(newProducts.totalPrice);
+
+//         res.render("client/pages/cart/index", {
+//             pageTitle: "Giỏ hàng",
+//             cartDetail: newProducts,
+//             // totalPrice: cart.totalPrice
+//         })
+//     } else {
+
+//     }
+
+
+// };
+
+
 
 // [POST] /cart/add/:productId
 module.exports.addPost = async (req, res) => {
@@ -28,7 +100,7 @@ module.exports.addPost = async (req, res) => {
                     "products.$.quantity": quantityNew
                 }
             }
-        );  
+        );
     } else {
         const objectCart = {
             product_id: productId,
