@@ -2,6 +2,7 @@ const productRoute = require("./product.route");
 const homeRoute = require("./home.route")
 const searchRoute = require("./search.route")
 const cartRoute = require("./cart.route")
+const checkoutRoute = require("./checkout.route")
 
 
 const categoryMiddleware = require("../../middlewares/client/category.middleware")
@@ -14,8 +15,10 @@ module.exports = (app) => {
   app.use("/", homeRoute);
 
   app.use("/products", productRoute);
-  
+
   app.use("/search", searchRoute);
 
   app.use("/cart", cartRoute);
+
+  app.use("/checkout", checkoutRoute);
 };

@@ -24,3 +24,10 @@ module.exports.priceNewProductsCart = (products) => {
     })
     return newProducts
 }
+
+module.exports.priceNewProductCart = (product) => {
+    const priceNew = (
+        (product.product_id.price * (100 - product.product_id.discountPercentage)) / 100
+    ).toFixed(0)
+    return priceNew
+}

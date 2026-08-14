@@ -1,0 +1,112 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+    .container.my-5
+
+        //- =========================
+        //- THÔNG BÁO
+        //- =========================
+        .text-center.mb-5
+            .display-1.text-success
+                | ✓
+
+            h1.text-success
+                | Đặt hàng thành công!
+
+            p.text-muted
+                | Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được tiếp nhận.
+
+        //- =========================
+        //- THÔNG TIN ĐƠN HÀNG
+        //- =========================
+        .row.justify-content-center
+            .col-lg-9
+
+                .card.mb-4
+                    .card-header
+                        h5.mb-0
+                            | Thông tin đơn hàng
+
+                    .card-body
+                        .row
+                            .col-md-6
+                                p.mb-2
+                                    strong Mã đơn hàng:
+                                    |  #{order._id}
+
+                                p.mb-2
+                                    strong Người nhận:
+                                    |  #{order.userInfo.fullName}
+
+                                p.mb-2
+                                    strong Số điện thoại:
+                                    |  #{order.userInfo.phone}
+
+                            .col-md-6
+                                p.mb-2
+                                    strong Địa chỉ:
+                                    |  #{order.userInfo.address}
+
+                                p.mb-2
+                                    strong Phương thức thanh toán:
+                                    |  #{order.paymentMethod}
+
+                //- =========================
+                //- SẢN PHẨM
+                //- =========================
+                .card.mb-4
+                    .card-header
+                        h5.mb-0
+                            | Sản phẩm đã đặt
+
+                    .card-body
+                        each item in order.products
+                            .row.align-items-center.py-3.border-bottom
+
+                                .col-md-2
+                                    if item.product_id
+                                        img(
+                                            src=item.product_id.thumbnail
+                                            alt=item.product_id.title
+                                            width="80"
+                                            height="80"
+                                        )
+
+                                .col-md-4
+                                    if item.product_id
+                                        h6.mb-1
+                                            | #{item.product_id.title}
+
+                                .col-md-2
+                                    p.mb-0
+                                        | #{item.priceNew}
+
+                                .col-md-2
+                                    p.mb-0
+                                        | x #{item.quantity}
+
+                                .col-md-2.text-end
+                                    strong
+                                        | #{item.priceNew * item.quantity}
+
+                        .row.mt-4
+                            .col-12.text-end
+                                h4.text-danger
+                                    | Tổng tiền: #{totalPrice}
+
+                //- =========================
+                //- BUTTON
+                //- =========================
+                .text-center
+                    a.btn.btn-primary.me-2(
+                        href="/products"
+                    )
+                        | Tiếp tục mua sắm
+
+                    a.btn.btn-outline-secondary(
+                        href="/"
+                    )
+                        | Về trang chủ

@@ -1,0 +1,140 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .container.my-5
+        h1.mb-4 Thanh toán
+
+        .row
+            //- =========================
+            //- THÔNG TIN NHẬN HÀNG
+            //- =========================
+            .col-md-7
+                .card.mb-4
+                    .card-header
+                        h5.mb-0 Thông tin nhận hàng
+
+                    .card-body
+                        form(
+                            action="/checkout/order"
+                            method="POST"
+                        )
+                            .mb-3
+                                label.form-label(for="fullName")
+                                    | Họ và tên
+
+                                input.form-control(
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    placeholder="Nhập họ và tên"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="phone")
+                                    | Số điện thoại
+
+                                input.form-control(
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Nhập số điện thoại"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="address")
+                                    | Địa chỉ nhận hàng
+
+                                textarea.form-control(
+                                    id="address"
+                                    name="address"
+                                    rows="3"
+                                    placeholder="Nhập địa chỉ nhận hàng"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label
+                                    | Phương thức thanh toán
+
+                                .form-check
+                                    input.form-check-input(
+                                        type="radio"
+                                        id="cod"
+                                        name="paymentMethod"
+                                        value="COD"
+                                        checked
+                                    )
+
+                                    label.form-check-label(for="cod")
+                                        | Thanh toán khi nhận hàng (COD)
+
+                                .form-check
+                                    input.form-check-input(
+                                        type="radio"
+                                        id="banking"
+                                        name="paymentMethod"
+                                        value="BANKING"
+                                    )
+
+                                    label.form-check-label(for="banking")
+                                        | Chuyển khoản ngân hàng
+
+                            button.btn.btn-success.w-100(
+                                type="submit"
+                            )
+                                | ĐẶT HÀNG
+
+
+            //- =========================
+            //- ĐƠN HÀNG
+            //- =========================
+            .col-md-5
+                .card
+                    .card-header
+                        h5.mb-0 Đơn hàng của bạn
+
+                    .card-body
+                        each item, index in cartDetail.products
+                            .d-flex.align-items-center.mb-3
+                                img.me-3(
+                                    src=item.product_id.thumbnail
+                                    alt=item.product_id.title
+                                    width="60"
+                                    height="60"
+                                )
+
+                                .flex-grow-1
+                                    h6.mb-1
+                                        | #{item.product_id.title}
+
+                                    small.text-muted
+                                        | Số lượng: #{item.quantity}
+
+                                .text-end
+                                    | #{item.product_id.priceNew * item.quantity}
+
+                            if index < cartDetail.products.length - 1
+                                hr
+
+                        hr
+
+                        .d-flex.justify-content-between
+                            strong Tạm tính:
+                            strong #{cartDetail.totalPrice}
+
+                        .d-flex.justify-content-between.mt-2
+                            strong Phí vận chuyển:
+                            span 0
+
+                        hr
+
+                        .d-flex.justify-content-between
+                            h5 Tổng cộng:
+                            h5.text-danger
+                                | #{cartDetail.totalPrice}
