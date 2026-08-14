@@ -1,7 +1,9 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
 
 block main
-  div #{cartDetail}
+  +alert-success(3000)
   .container.my-5
     h1.mb-4 Giỏ hàng
 
@@ -38,6 +40,8 @@ block main
             td
               input(
                 type="number"
+                name="quantity"
+                data-product-id= item.product_id._id
                 value= item.quantity
                 min="1"
               )
@@ -46,8 +50,9 @@ block main
               | #{item.product_id.priceNew * item.quantity}
 
             td
-              button.btn.btn-danger.btn-sm(
-                type="button"
+              a(
+                href=`/cart/delete/${item.product_id._id}`
+                class="btn btn-danger"
               )
                 | Xóa
 
@@ -64,3 +69,4 @@ block main
         href="/checkout"
       )
         | THANH TOÁN
+  script(src="/js/cart.js") 

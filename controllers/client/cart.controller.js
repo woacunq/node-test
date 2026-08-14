@@ -1,4 +1,5 @@
 const Cart = require("../../models/cart.model")
+const Product = require("../../models/product.model")
 const productHelper = require("../../helpers/product")
 
 // [GET] /cart
@@ -122,5 +123,43 @@ module.exports.addPost = async (req, res) => {
         _id: productId
     })
     res.redirect(`/products/detail/${product.slug}`);
+
+};
+
+// [GET] /cart/delete/:id
+module.exports.delete = async (req, res) => {
+    const cartId = req.cookies.cartId
+    const productId = req.params.productId
+
+    await Cart.updateOne(
+        {
+            _id: cartId
+        },
+        {
+            $pull: { "products": { product_id: productId } }
+        })
+
+    req.flash("success", "Đã xóa sản phẩm thành công")
+    res.redirect("/cart")
+
+};
+
+// [GET] /cart/update/:id/:quantity
+module.exports.changeQuantity = async (req, res) => {
+    const cartId = req.cookies.cartId
+    const productId = req.params.productId
+    const quantity = req.params.quantity
+    
+    await Cart.updateOne(
+        {
+            _id: cartId,
+            "products.product_id": productId
+        },
+        {
+            "products.$.quantity": quantity
+        })
+
+    req.flash("success", "Cập nhật số lượng sản phẩm thành công")
+    res.redirect("/cart")
 
 };
