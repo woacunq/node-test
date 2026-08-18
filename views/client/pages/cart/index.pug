@@ -1,72 +1,80 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-
 block main
   +alert-success(3000)
+
   .container.my-5
     h1.mb-4 Giỏ hàng
 
-    table.table.table-bordered
-      thead
-        tr
-          th STT
-          th Ảnh
-          th Tên
-          th Giá
-          th Số lượng
-          th Tổng tiền
-          th Hành động
-
-      tbody
-        each item, index in cartDetail.products
+    if cartDetail.products.length > 0
+      table.table.table-bordered
+        thead
           tr
-            td #{index+1}
+            th STT
+            th Ảnh
+            th Tên
+            th Giá
+            th Số lượng
+            th Tổng tiền
+            th Hành động
 
-            td
-              img(
-                src=`${item.product_id.thumbnail}`
-                alt=`${item.product_id.title}`
-                width="80"
-              )
+        tbody
+          each item, index in cartDetail.products
+            tr
+              td #{index + 1}
 
-            td
-              a(href=`/products/detail/${item.product_id.slug}`)
-                | #{item.product_id.title}
+              td
+                img(
+                  src=`${item.product_id.thumbnail}`
+                  alt=`${item.product_id.title}`
+                  width="80"
+                )
 
-            td
-              | #{item.product_id.priceNew}
+              td
+                a(href=`/products/detail/${item.product_id.slug}`)
+                  | #{item.product_id.title}
 
-            td
-              input(
-                type="number"
-                name="quantity"
-                data-product-id= item.product_id._id
-                value= item.quantity
-                min="1"
-              )
+              td
+                | #{item.product_id.priceNew}
 
-            td
-              | #{item.product_id.priceNew * item.quantity}
+              td
+                input(
+                  type="number"
+                  name="quantity"
+                  data-product-id=item.product_id._id
+                  value=item.quantity
+                  min="1"
+                )
 
-            td
-              a(
-                href=`/cart/delete/${item.product_id._id}`
-                class="btn btn-danger"
-              )
-                | Xóa
+              td
+                | #{item.product_id.priceNew * item.quantity}
 
-      
+              td
+                a(
+                  href=`/cart/delete/${item.product_id._id}`
+                  class="btn btn-danger"
+                )
+                  | Xóa
 
-    //- Tổng đơn hàng
-    .text-end.mt-4
-      h3
-        | Tổng đơn hàng: #{cartDetail.totalPrice}$
+      //- Tổng đơn hàng
+      .text-end.mt-4
+        h3
+          | Tổng đơn hàng: #{cartDetail.totalPrice}$
 
-    //- Nút thanh toán
-    .text-end.mt-3
-      a.btn.btn-success(
-        href="/checkout"
-      )
-        | THANH TOÁN
-  script(src="/js/cart.js") 
+      //- Nút thanh toán
+      .text-end.mt-3
+        a.btn.btn-success(
+          href="/checkout"
+        )
+          | THANH TOÁN
+
+    else
+      .text-center.py-5
+        h3 Giỏ hàng đang trống
+        p.text-muted Bạn chưa có sản phẩm nào trong giỏ hàng.
+
+        a.btn.btn-primary.mt-3(href="/products")
+          | Tiếp tục mua sắm
+
+  script(src="/js/cart.js")
