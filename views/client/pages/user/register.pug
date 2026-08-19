@@ -1,0 +1,96 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+
+
+    .container.my-5
+        .row.justify-content-center
+            .col-md-6.col-lg-5
+
+                .card.shadow-sm
+                    .card-header.text-center.py-3
+                        h3.mb-0
+                            | Đăng ký tài khoản
+
+                    .card-body.p-4
+                        form(
+                            action="/user/register"
+                            method="POST"
+                        )
+
+                            .mb-3
+                                label.form-label(for="fullName")
+                                    | Họ và tên
+
+                                input.form-control(
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    placeholder="Nhập họ và tên"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="email")
+                                    | Email
+
+                                input.form-control(
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Nhập email"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="phone")
+                                    | Số điện thoại
+
+                                input.form-control(
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Nhập số điện thoại"
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="password")
+                                    | Mật khẩu
+
+                                input.form-control(
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Nhập mật khẩu"
+                                    required
+                                )
+
+                            //- .mb-3
+                            //-     label.form-label(for="confirmPassword")
+                            //-         | Nhập lại mật khẩu
+
+                            //-     input.form-control(
+                            //-         type="password"
+                            //-         id="confirmPassword"
+                            //-         name="confirmPassword"
+                            //-         placeholder="Nhập lại mật khẩu"
+                            //-         required
+                            //-     )
+
+                            button.btn.btn-primary.w-100(
+                                type="submit"
+                            )
+                                | ĐĂNG KÝ
+
+                        .text-center.mt-4
+                            span
+                                | Bạn đã có tài khoản?
+
+                            a.ms-1(
+                                href="/user/login"
+                            )
+                                | Đăng nhập
