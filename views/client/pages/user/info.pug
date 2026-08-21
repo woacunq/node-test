@@ -1,0 +1,86 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .container.my-5
+        h1.mb-4 Thông tin cá nhân
+
+        .card.mb-4
+            .card-header
+                | Thông tin tài khoản
+
+            .card-body
+                .row
+                    .col-md-3.text-center
+                        if user.avatar
+                            img.rounded-circle.mb-3(
+                                src=user.avatar
+                                alt=user.fullName
+                                width="150"
+                                height="150"
+                            )
+                        else
+                            img.rounded-circle.mb-3(
+                                src="/images/no-avatar.png"
+                                alt="Avatar mặc định"
+                                width="150"
+                                height="150"
+                            )
+
+                    .col-md-9
+                        table.table
+                            tbody
+                                tr
+                                    th(width="200")
+                                        | Họ và tên
+                                    td
+                                        | #{user.fullName}
+
+                                tr
+                                    th
+                                        | Email
+                                    td
+                                        | #{user.email}
+
+                                tr
+                                    th
+                                        | Số điện thoại
+                                    td
+                                        | #{user.phone}
+
+                                tr
+                                    th
+                                        | Trạng thái
+                                    td
+                                        if user.status == "active"
+                                            span.badge.bg-success
+                                                | Hoạt động
+                                        else
+                                            span.badge.bg-danger
+                                                | Khóa
+
+                                tr
+                                    th
+                                        | Ngày tạo
+                                    td
+                                        | #{user.createdAt}
+
+        .d-flex.gap-2
+            a.btn.btn-primary(
+                href=`/user/edit`
+            )
+                | Chỉnh sửa thông tin
+
+            a.btn.btn-warning(
+                href="/user/password/change"
+            )
+                | Đổi mật khẩu
+
+            a.btn.btn-danger(
+                href="/user/logout"
+            )
+                | Đăng xuất

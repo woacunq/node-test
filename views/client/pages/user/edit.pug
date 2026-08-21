@@ -1,0 +1,96 @@
+extends ../../layouts/default.pug
+
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .container.my-5
+        h1.mb-4 Chỉnh sửa thông tin cá nhân
+
+        .card
+            .card-header
+                | Cập nhật thông tin
+
+            .card-body
+                form(
+                    action="/user/edit?_method=PATCH"
+                    method="POST"
+                    enctype="multipart/form-data"
+                )
+
+                    .row
+                        .col-md-6
+
+                            .mb-3
+                                label.form-label(for="fullName")
+                                    | Họ và tên
+
+                                input.form-control(
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    value=user.fullName
+                                    required
+                                )
+
+                            .mb-3
+                                label.form-label(for="email")
+                                    | Email
+
+                                input.form-control(
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value=user.email
+                                    readonly
+                                )
+
+                            .mb-3
+                                label.form-label(for="phone")
+                                    | Số điện thoại
+
+                                input.form-control(
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value=user.phone
+                                )
+
+                        .col-md-6
+
+                            .mb-3
+                                label.form-label
+                                    | Ảnh đại diện hiện tại
+
+                                br
+
+                                if user.avatar
+                                    img.rounded(
+                                        src=user.avatar
+                                        alt=user.fullName
+                                        width="150"
+                                    )
+                                else
+                                    img.rounded(
+                                        src="/images/no-avatar.png"
+                                        alt="No Avatar"
+                                        width="150"
+                                    )
+
+                            .mb-3
+                                label.form-label(for="avatar")
+                                    | Chọn ảnh mới
+
+                                input.form-control(
+                                    type="file"
+                                    id="avatar"
+                                    name="avatar"
+                                    accept="image/*"
+                                )
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Lưu thay đổi

@@ -101,7 +101,7 @@ module.exports.editPatch = async (req, res) => {
 
         // Nếu có upload avatar mới
         if (req.file) {
-            dataUpdate.avatar = req.file.path;
+            dataUpdate.avatar = req.body.avatar;
         }
 
         // Nếu nhập mật khẩu mới

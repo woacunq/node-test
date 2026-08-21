@@ -8,13 +8,12 @@ module.exports.infoUser = async (req, res, next) => {
             status: "active"
         }).select("-password")
 
-        
+
         if (user) {
+            req.user = user;
             res.locals.user = user
         }
     }
-
-
     next()
 
 };
