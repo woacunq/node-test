@@ -1,8 +1,11 @@
 const Product = require('../../models/product.model');
 const ProductsCategory = require('../../models/category.model');
+
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
 const createTreeHelper = require('../../helpers/createTree');
+const productHelper = require('../../helpers/product');
+
 const systemConfig = require('../../config/system');
 
 // [GET] /admin/products
@@ -214,6 +217,7 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id,
       deleted: false,
     });
+    product.priceNew = productHelper.priceNewProduct(product)
 
     const categories = await ProductsCategory.find({ deleted: false })
 
@@ -244,11 +248,13 @@ module.exports.editPatch = async (req, res) => {
     } else {
       req.body.position = parseInt(req.body.position);
     }
+
     const updatedBy = {
       account_id: res.locals.user.id,
       updatedAt: new Date()
     }
 
+    console.log(req.body);
 
     await Product.updateOne({ _id: req.params.id }, {
       ...req.body,

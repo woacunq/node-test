@@ -6,7 +6,6 @@ include ../../mixins/select-tree.pug
 block main
   +alert-error(5000)
   +alert-success(5000)
-
   if role.permissions && role.permissions.includes("products_edit")
 
     h1 Chỉnh sửa sản phẩm
@@ -91,8 +90,14 @@ block main
         input#discountPercentage.form-control(
           type='number',
           name='discountPercentage',
-          value='0',
+          value=`${product.discountPercentage}`,
           min='0'
+        )
+      label.form-label Giá bán hiện tại
+        input.form-control(
+            type="text"
+            value=product.priceNew
+            readonly
         )
 
       //- Số lượng
