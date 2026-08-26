@@ -1,5 +1,6 @@
 const User = require("../../models/user.model")
 const ForgotPassword = require("../../models/forgot-password.model")
+const Cart = require("../../models/cart.model")
 
 
 const generateHelper = require("../../helpers/generate")
@@ -40,7 +41,7 @@ module.exports.registerPost = async (req, res) => {
 
 };
 
-// [POST] /user/login
+// [GET] /user/login
 module.exports.login = async (req, res) => {
     res.render("client/pages/user/login", {
         pageTitle: "Đăng nhập tài khoản"
@@ -73,6 +74,48 @@ module.exports.loginPost = async (req, res) => {
         return res.redirect("/user/login")
     }
 
+    const userCart = await Cart.findOne(
+        {
+            // _id: req.cookies.cartId,
+            user_id: user.id
+        })
+
+    if (!userCart) {
+        await Cart.updateOne(
+            {
+                _id: req.cookies.cartId
+            },
+            {
+                user_id: user.id
+            }
+        )
+    } else {
+        const guestCart = await Cart.findById(req.cookies.cartId);
+
+        if (guestCart && userCart) {
+            for (const guestItem of guestCart.products) {
+                const existProduct = userCart.products.find(
+                    item =>
+                        item.product_id.toString() ===
+                        guestItem.product_id.toString()
+                );
+
+                if (existProduct) {
+                    existProduct.quantity += guestItem.quantity;
+                } else {
+                    userCart.products.push(guestItem);
+                }
+            }
+
+            await userCart.save();
+
+            await Cart.deleteOne({
+                _id: guestCart._id
+            });
+
+            res.cookie("cartId", userCart.id);
+        }
+    }
 
     res.cookie("tokenUser", user.tokenUser)
     res.redirect("/")
@@ -82,6 +125,7 @@ module.exports.loginPost = async (req, res) => {
 
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
+    // res.clearCookie("cartId")
     res.clearCookie("tokenUser")
     res.redirect("/user/login")
 };

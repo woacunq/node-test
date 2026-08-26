@@ -5,6 +5,8 @@ const cartSchema = new mongoose.Schema(
         user_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
+            unique: true,
+            sparse: true  //unique + sparse sẽ cho phép nhiều cart có user_id = null (guest), nhưng chỉ cho phép mỗi user đăng nhập sở hữu tối đa một cart.
             // required: true
         },
 
