@@ -90,6 +90,7 @@ module.exports.loginPost = async (req, res) => {
             }
         )
     } else {
+        // guestCart
         const guestCart = await Cart.findById(req.cookies.cartId);
 
         if (guestCart && userCart) {

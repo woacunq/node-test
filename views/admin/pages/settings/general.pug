@@ -1,0 +1,78 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    h1 Cài đặt chung
+
+    +alert-error(5000)
+    +alert-success(5000)
+
+    form(
+        action=`${prefixAdmin}/settings/general?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        .form-group.mb-3
+            label(for="websiteName") Tên website
+            input.form-control(
+                type="text"
+                id="websiteName"
+                name="websiteName"
+                value=settingGeneral.websiteName
+            )
+
+        .form-group(upload-image)
+            label(for="logo") Logo
+
+            input#logo.form-control-file(
+                type="file"
+                name="logo"
+                accept="image/*"
+                upload-image-input
+            )
+
+            img.image-preview(
+                src=settingGeneral? settingGeneral.logo:""
+                upload-image-preview
+            )
+
+            .remove-image X
+
+        .form-group.mb-3
+            label(for="phone") Số điện thoại
+            input.form-control(
+                type="text"
+                id="phone"
+                name="phone"
+                value=settingGeneral.phone
+            )
+
+        .form-group.mb-3
+            label(for="email") Email
+            input.form-control(
+                type="email"
+                id="email"
+                name="email"
+                value=settingGeneral.email
+            )
+
+        .form-group.mb-3
+            label(for="address") Địa chỉ
+            input.form-control(
+                type="text"
+                id="address"
+                name="address"
+                value=settingGeneral.address
+            )
+
+        .form-group.mb-3
+            label(for="copyright") Copyright
+            textarea.form-control(
+                id="copyright"
+                name="copyright"
+                rows="4"
+            )= settingGeneral.copyright
+
+        button.btn.btn-primary(
+            type="submit"
+        ) Cập nhật
