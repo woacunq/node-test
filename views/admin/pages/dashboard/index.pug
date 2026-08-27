@@ -1,5 +1,112 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default
+
 block main
-    h1 Trang tổng quan
-    //- div #{user}
-    //- div #{role.permissions}
+    h1.mb-4 Dashboard
+    .row.mb-4
+        .col-12
+            .card
+                .card-header
+                    | Thông tin tài khoản
+
+                .card-body
+                    .row
+                        .col-md-3
+                            if user.avatar
+                                img.rounded(
+                                    src=user.avatar
+                                    alt=user.fullName
+                                    width="120"
+                                )
+                            else
+                                img.rounded(
+                                    src="/images/no-avatar.png"
+                                    alt="No Avatar"
+                                    width="120"
+                                )
+
+                        .col-md-9
+                            p
+                                | Họ tên:
+                                b #{user.fullName}
+
+                            p
+                                | Email:
+                                b #{user.email}
+
+                            if user.phone
+                                p
+                                    | Số điện thoại:
+                                    b #{user.phone}
+
+                            if user.role_id && user.role_id.title
+                                p
+                                    | Phân quyền:
+                                    b #{user.role_id.title}
+    .row
+        .col-lg-6
+            .card.mb-4
+                .card-header Danh mục sản phẩm
+
+                .card-body
+                    p
+                        | Số lượng:
+                        b #{statistic.category.total}
+
+                    p
+                        | Hoạt động:
+                        b.text-success #{statistic.category.active}
+
+                    p
+                        | Dừng hoạt động:
+                        b.text-danger #{statistic.category.inactive}
+
+        .col-lg-6
+            .card.mb-4
+                .card-header Sản phẩm
+
+                .card-body
+                    p
+                        | Số lượng:
+                        b #{statistic.product.total}
+
+                    p
+                        | Hoạt động:
+                        b.text-success #{statistic.product.active}
+
+                    p
+                        | Dừng hoạt động:
+                        b.text-danger #{statistic.product.inactive}
+
+        .col-lg-6
+            .card.mb-4
+                .card-header Tài khoản Admin
+
+                .card-body
+                    p
+                        | Số lượng:
+                        b #{statistic.admin.total}
+
+                    p
+                        | Hoạt động:
+                        b.text-success #{statistic.admin.active}
+
+                    p
+                        | Dừng hoạt động: 
+                        b.text-danger #{statistic.admin.inactive}
+
+        .col-lg-6
+            .card.mb-4
+                .card-header Tài khoản User
+
+                .card-body
+                    p
+                        | Số lượng:
+                        b #{statistic.user.total}
+
+                    p
+                        | Hoạt động:
+                        b.text-success #{statistic.user.active}
+
+                    p
+                        | Dừng hoạt động:
+                        b.text-danger #{statistic.user.inactive}

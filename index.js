@@ -68,6 +68,12 @@ app.use(
 // Routes
 routeAdmin(app);
 route(app);
+app.use((req, res) => {
+  res.status(404).render("client/pages/errors/404", {
+    pageTitle: "404 Not Found"
+  });
+});
+
 
 // Start Server
 app.listen(port, () => {
